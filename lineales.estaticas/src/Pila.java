@@ -58,13 +58,15 @@ public class Pila {
     }
    
     public void vaciar() {
-       
-        for (int i = 0; i < this.tope; i++) {
- 
- 
+        if (this.tope > -1) {
+            for (int i = this.tope; i > -1; i--) {
+                this.arreglo[i] = null;
+            }
+            this.tope = -1;
         }
  
- 
     }
+
+    
  }
  
