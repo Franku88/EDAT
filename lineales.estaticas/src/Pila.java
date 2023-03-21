@@ -61,7 +61,7 @@ public class Pila {
         /*Realiza un recorrido desde el tope hasta la posicion 0,
         asigna null en todas las posiciones, si el tope es -1, entonces
         el arreglo ya esta vacio*/
-        if (!esVacia()) {
+        if (!this.esVacia()) {
             for (int i = this.tope; i > -1; i--) {
                 this.arreglo[i] = null;
             }
@@ -69,29 +69,36 @@ public class Pila {
         }
     }
 
-    public Pila clon() {
+    public Pila clone() {
         //Metodo que crea una instancia con los mismos elementos y tope de la pila en el llamado
         //Crea clon vacio
         Pila pila2 = new Pila();
         //Verifica que la pila no este vacia
-        if (!esVacia()) {
+        if (!this.esVacia()) {
             //Asigna el mismo tope a pila2
             pila2.tope = this.tope;
             //Invoca metodo recursivo con ambos arreglos y el tope de ambas pilas
-            pila2.arreglo = clonRecursivo(this.arreglo, pila2.arreglo, this.tope);
+            cloneRecursive(this.arreglo, pila2.arreglo, this.tope);
         }
         return pila2;
     }
 
-    private Object[] clonRecursivo(Object[] arreglo1, Object[] arreglo2, int tope) {
+    private void cloneRecursive(Object[] arreglo1, Object[] arreglo2, int tope) {
         /*arreglo1: array de pila a clonar, arreglo2: array de clon, tope actual a copiar*/
         //Corta recursion si sobrepasa posicion 0 de arreglo (copia desde tope hasta 0)
         if (tope != -1) {
-            //Asigna valor de la posicion tope
+            //Asigna objeto de la posicion tope
             arreglo2[tope]= arreglo1[tope];
             //Invocacion recursiva pero con objecto debajo del tope actual
-            clonRecursivo(arreglo1, arreglo2, tope-1);
+            cloneRecursive(arreglo1, arreglo2, tope-1);
         }
-        return arreglo2;
+    }
+
+    public String toString() {
+        String contenidoPila = "";
+        for (int i = 0; i < this.tope; i++) {
+            contenidoPila = contenidoPila + "["+this.arreglo[i]+"]";
+        }
+        return contenidoPila;
     }
 }
