@@ -1,3 +1,7 @@
+package estructuras.lineales.testing;
+
+import estructuras.lineales.estaticas.Pila;
+
 public class testingPila {
 
     static String sOk = "OK!", sErr = "ERROR";

@@ -1,28 +1,32 @@
+package estructuras.lineales.estaticas;
+
 public class Pila {
     // Implementacion de Pila estatica
     private Object[] arreglo;
     private int tope;
-    private final int tamanio = 20;
+    private final int TAMANIO = 10;
  
  
     // Constructor
     public Pila() {
-        this.arreglo = new Object[tamanio];
+        //Crea nueva pila con tamanio estatico
+        this.arreglo = new Object[TAMANIO];
+        //Asigna tope -1 pues esta vacia
         this.tope = -1;
     }
  
  
     public boolean apilar(Object nuevoElemento) {
+        //Agrega nuevo objeto al tope de la pila
+        //Retorna false si la pila esta llena
         boolean exito;
- 
- 
-        if (this.tope + 1 >= this.tamanio) {
+        if (this.tope + 1 >= this.TAMANIO) {
             // la pila esta llena
             exito = false;
         } else {
             // Aumenta el tope y pone el nuevo elemento en esa posicion
-            tope++;
-            this.arreglo[tope] = nuevoElemento;
+            this.tope++;
+            this.arreglo[this.tope] = nuevoElemento;
             exito = true;
         }
         return exito;
@@ -100,10 +104,22 @@ public class Pila {
     }
 
     public String toString() {
-        String contenidoPila = "";
-        for (int i = 0; i < this.tope; i++) {
-            contenidoPila = contenidoPila + "["+this.arreglo[i]+"]";
+        //Retorna una cadena con los objetos que contiene la pila
+        String stringPila = "";
+        //Si el tope es -1, entonces la pila esta vacia
+        if (this.tope == -1) {
+            stringPila = "Pila vacia";
+        } else {
+            int i;
+            stringPila = "[";
+            for (i = 0; i<=this.tope; i++) {
+                stringPila = stringPila + this.arreglo[i].toString();
+                if (i != this.tope) {
+                    stringPila = stringPila + ",";
+                }
+            }
+            stringPila = stringPila + "]";
         }
-        return contenidoPila;
+        return stringPila;
     }
 }

@@ -1,3 +1,5 @@
+package estructuras.lineales.dinamicas;
+
 public class Nodo {
     
     private Object elemento;
