@@ -44,9 +44,14 @@ public class Pila {
     }
  
  
-    public Object obtenerElementoTope() {
+    public Object obtenerTope() {
         //Retorna elemento de la posicion tope
-        Object elementoTope = arreglo[this.tope];
+        Object elementoTope;
+        if(tope!=-1) {
+            elementoTope = arreglo[this.tope];
+        } else {
+            elementoTope = null;
+        }
         return elementoTope;
     }
  
