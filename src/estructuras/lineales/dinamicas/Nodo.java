@@ -3,27 +3,33 @@ package estructuras.lineales.dinamicas;
 public class Nodo {
     
     private Object elemento;
-    private Object enlace;
+    private Nodo enlace;
 
-    public Nodo(Object element, Object link) {
-        this.elemento = element;
+    //Constructor
+    public Nodo(Object elem, Nodo link) {
+        this.elemento = elem;
         this.enlace = link;
     }
 
-    public void setElemento(Object element) {
-        this.elemento = element;
-    }
-
-    public void setEnlace(Object link) {
-        this.enlace = link;
-    }
-    
+    //Getters
     public Object getElemento() {
+        //Retorna el elemento del nodo actual
         return this.elemento;
     }
 
-    public Object getEnlace() {
+    public Nodo getEnlace() {
+        //Retorna el enlace del nodo actual
         return this.enlace;
     }
+    
+    //Setters
+    public void setElemento(Object element) {
+        //Modifica el elemento del nodo actual
+        this.elemento = element;
+    }
 
+    public void setEnlace(Nodo link) {
+        //Modifica el enlace del nodo actual
+        this.enlace = link;
+    }
 }

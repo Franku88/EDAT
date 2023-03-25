@@ -1,6 +1,6 @@
 package estructuras.lineales.testing;
 
-import estructuras.lineales.estaticas.Pila;
+import estructuras.lineales.dinamicas.Pila;
 
 public class testingPila {
 
