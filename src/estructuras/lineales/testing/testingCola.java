@@ -1,4 +1,5 @@
 package estructuras.lineales.testing;
+
 import estructuras.lineales.estaticas.Cola;
 //import estructuras.lineales.dinamicas.Cola;
 
@@ -20,9 +21,9 @@ public class testingCola {
 		System.out.println("COMIENZO TEST COLA");
 		Cola q1 = new Cola();
 		System.out.println("Cola vacía: \t\t\t\t\t\t\t--> " + q1.toString());
-		boolean exito = true;
+		//boolean exito = true;
 
-		System.out.println("Si es cola estatica tama�o <= 10 se debe llenar");
+		System.out.println("Si es cola estatica tamanio <= 10 se debe llenar");
 		int num = 1;
 		while (num < 12) {
 			if (num < 10) {
@@ -70,7 +71,7 @@ public class testingCola {
 
 		System.out.println("Verifica copia guardada espera [3 4 5 6 7 8 9 <10 11> 23 24]: \t--> " + q2.toString());
 		System.out.println(
-				"Pone 27 espera true en dinamica y false en estatica: \t" + ((q2.poner(27) == true) ? sOk : sErr));
+				"Pone 27 espera true en dinamica y false en estatica: \t" + q2.poner(27));
 		System.out.println("Verifica copia espera [3 4 5 6 7 8 9 <10 11> 23 24 <27>]: \t--> " + q2.toString());
 		System.out.println(
 				"Saca " + q2.obtenerFrente() + " de cola espera true: \t\t\t\t" + ((q2.sacar() == true) ? sOk : sErr));

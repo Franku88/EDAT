@@ -1,5 +1,10 @@
 package estructuras.lineales.dinamicas;
 
+/************* Autores ***********
+- Franco Benitez, Legajo FAI-3169
+- Jamiro Zuñiga, Legajo FAI-3429
+*/
+
 public class Nodo {
     
     private Object elemento;
@@ -7,6 +12,7 @@ public class Nodo {
 
     //Constructor
     public Nodo(Object elem, Nodo link) {
+        //Elemento que contiene y su enlace al siguiente nodo
         this.elemento = elem;
         this.enlace = link;
     }

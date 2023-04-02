@@ -1,10 +1,17 @@
 package estructuras.lineales.dinamicas;
 
+/************* Autores ***********
+- Franco Benitez, Legajo FAI-3169
+- Jamiro Zuñiga, Legajo FAI-3429
+*/
+
 public class Pila {
     
     private Nodo tope;
 
+    //Constructor
     public Pila() {
+        //Crea pila vacia, con tope null
         this.tope = null;
     }
 
@@ -16,12 +23,12 @@ public class Pila {
         //Se asigna el nuevo tope creado
         this.tope = nuevoTope;
 
-        //Apilar existoso
+        //Apilar exitoso
         return true;
     }
 
     public boolean desapilar() {
-        //Tomo el enlace del tope actual y lo asigno como nuevo tope        
+        //Metodo que borra el elemento del tope actual y usa su enlace como nuevo tope       
         boolean exito;
         //Si la pila esta vacia, entonces no se puede desapilar
         if (!this.esVacia()) {
@@ -34,7 +41,7 @@ public class Pila {
     }
 
     public Object obtenerTope() {
-        //Retorna el elemento del tope
+        //Metodo que retorna el elemento del tope
         Object elemento;
         //Si la pila esta vacia, retorna null
         if (!this.esVacia()) {
@@ -46,14 +53,13 @@ public class Pila {
     }    
 
     public boolean esVacia() {
-        //Retorna true si la pila esta vacia
+        //Metodo que retorna true si la pila esta vacia
         //Si el nodo tope es null, entonces la pila esta vacia
-        boolean esVacia = this.tope == null;
-        return esVacia;
+        return this.tope == null;
     }
 
     public void vaciar() {
-        //Vacia la pila asignando null como tope, desenlazando todos los nodos
+        //Vacia la pila asignando null como tope, desenlazando asi todos los nodos
         this.tope = null;
     }
 
@@ -72,7 +78,8 @@ public class Pila {
         Nodo retorno;
         //Si el nodo tope es null, retorna null
         if (tope != null) {
-            //Retorna un nodo con una copia del elemento del tope y con una copia de su enlace generada
+            //Crea un nodo con el elemento de tope y con una copia de su enlace
+            //Su enlace se copia y crea recursivamente
             retorno = new Nodo(tope.getElemento(), cloneRecursive(tope.getEnlace()));
         } else {
             retorno = null;
@@ -83,8 +90,8 @@ public class Pila {
     public String toString() {
         //Metodo que retorna un string con los objetos que contiene una pila dinamica
         String cadena = "";
-        //Si el tope es null, avisa que la pila esta vacia
-        if (this.tope != null) {
+        //Verifica que la pila no este vacia
+        if (!this.esVacia()) {
             cadena = "[";
             cadena = toStringRecursive(this.tope, cadena);
             cadena = cadena + "]";
@@ -101,7 +108,7 @@ public class Pila {
             //Por izquierda los elementos menores y por derecha los mayores
             cadena = toStringRecursive(enlace.getEnlace(), cadena) +","+ enlace.getElemento().toString();
         } else {
-            //Llego al primer elemento
+            //Llego al primer elemento, corta recursion y comienza a concatenar
             cadena = cadena + enlace.getElemento().toString();
         }
         return cadena;

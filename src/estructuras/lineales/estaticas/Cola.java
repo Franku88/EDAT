@@ -1,5 +1,9 @@
 package estructuras.lineales.estaticas;
 
+/************* Autores ***********
+- Franco Benitez, Legajo FAI-3169
+*/
+
 public class Cola {
     private Object[] arreglo;
     private int frente;
@@ -31,7 +35,7 @@ public class Cola {
     }
 
     public boolean estaLlena() {
-        /*Metodo que verifica si una cola esta llena, retorna verdadero si una cola esta llena
+        /*Metodo que verifica si una cola esta llena, retorna verdadero si esta llena
         falso si no lo esta*/
         boolean llena;
         llena = (this.fin + 1) % TAMANIO == this.frente;
@@ -47,7 +51,7 @@ public class Cola {
 
     public boolean sacar() {
         /*Metodo que saca el elemento en la posicion frente y asigna un nuevo frente, retorna verdadero
-        si se pudo sacar el elemento, retorna falso si no se pudo */
+        si se pudo sacar el elemento, falso si esta vacia */
         boolean exito;
         if(!this.esVacia()) {
             this.arreglo[this.frente] = null;
@@ -83,9 +87,11 @@ public class Cola {
         /*Metodo que clona una cola, retorna puntero de clon generado*/
         Cola clon = new Cola();
         if (!this.esVacia()) {
+            //Copia elementos uno a uno
             for (int i = 0; i < TAMANIO; i++) {
                 clon.arreglo[i] = this.arreglo[i];
             }
+            //Asigna las posiciones de los extremos
             clon.frente = this.frente;
             clon.fin = this.fin;
         }
@@ -96,6 +102,7 @@ public class Cola {
         /*Metodo que retorna una cadena que representa el contenido de la cola*/
         String cad = "";
         if (!this.esVacia()) {
+            //Uso una variable auxiliar para no modificar el frente al concatenar
             int aux = this.frente;
             cad = "[";
             while (aux != this.fin) {
@@ -107,7 +114,7 @@ public class Cola {
             }
             cad = cad + "]";
         } else {
-            cad = "La cola esta vacia.";
+            cad = "Cola vacia";
         }
         return cad;
     }

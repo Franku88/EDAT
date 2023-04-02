@@ -1,7 +1,14 @@
 package estructuras.lineales.testing;
 
+//import estructuras.lineales.estaticas.Pila;
 import estructuras.lineales.dinamicas.Pila;
 
+/**
+ *
+ * @author Catedra EDAT - FAI - UNCOMA 
+ * Ultima modificación: 22/04/2021
+ *
+ */
 public class testingPila {
 
     static String sOk = "OK!", sErr = "ERROR";
@@ -66,9 +73,9 @@ public class testingPila {
         System.out.println("Desapila en pila vacia espera false: \t\t\t" + ((p1.desapilar()) ? sErr : sOk));
         System.out.println("Verifica tope en pila vacia espera null: \t\t" + ((p1.obtenerTope() == null) ? sOk : sErr));
 
-        System.out.println("Verifica copia 1,2,3,4,5,6,7,8,6: \t\t\t\t-->" + p2.toString());
+        System.out.println("Verifica copia 1,2,3,4,5,6,7,8,6: \t\t\t\t--> " + p2.toString());
         System.out.println("Apila 7: \t\t\t\t\t\t" + ((p2.apilar(7)) ? sOk : sErr));
-        System.out.println("Verifica copia 1,2,3,4,5,6,7,8,6,7: \t\t\t\t-->" + p2.toString());
+        System.out.println("Verifica copia 1,2,3,4,5,6,7,8,6,7: \t\t\t\t--> " + p2.toString());
         System.out.println("Apila 8 espera false en estatica true en dinamica:\t" + p2.apilar(8));
         System.out.println("Apila 9 espera false en estatica true en dinamica:\t" + p2.apilar(9));
 
