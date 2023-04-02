@@ -4,7 +4,7 @@ public class Pila {
     // Implementacion de Pila estatica
     private Object[] arreglo;
     private int tope;
-    private final int TAMANIO = 10;
+    private static final int TAMANIO = 10;
  
  
     // Constructor
@@ -20,7 +20,7 @@ public class Pila {
         //Agrega nuevo objeto al tope de la pila
         //Retorna false si la pila esta llena
         boolean exito;
-        if (this.tope + 1 >= this.TAMANIO) {
+        if (this.tope + 1 >= TAMANIO) {
             // la pila esta llena
             exito = false;
         } else {
