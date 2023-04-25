@@ -1,0 +1,161 @@
+package estructuras.lineales.dinamicas;
+
+/************* Autores ***********
+- Franco Benitez, Legajo FAI-3169
+*/
+
+public class Lista {
+
+    private Nodo cabecera;
+    private int longitud;
+
+    public Lista() {
+        this.cabecera = null;
+        this.longitud = 0;
+    }
+
+    public int getLongitud() {
+        //Retorna longitud de la lista
+        return this.longitud;
+    }
+
+    public boolean esVacia() {
+        //Verifica si la lista esta vacia
+        return this.cabecera == null;
+    }
+
+    public boolean insertar(Object elemento, int pos) {
+        //Realiza la insercion del elemento en la posicion ingresada por parametro
+        boolean exito = true;
+        if (pos < 1 || this.longitud + 1 < pos) { //Error fuera de rango
+            exito = false;
+        } else {
+            if (pos == 1) {//Crea nuevo nodo y lo enlaza en la cabecera
+                cabecera = new Nodo(elemento, this.cabecera);
+            } else {
+                //A partir de cabecera, recupera los enlaces hasta el de la pos-1
+                Nodo aux = this.cabecera;
+                int i = 1;
+                while(i < pos-1) { //Busco el nodo de la pos-1
+                    aux = aux.getEnlace(); //Ultima iteracion aux es el nodo anterior al que quiero reemplazar
+                    i++;//Ultima iteracion i == pos-1
+                }
+                //Enlazo nodo de la pos al nuevo nodo
+                Nodo nuevo = new Nodo(elemento, aux.getEnlace());
+                //Enlazo nuevo nodo al de la pos-1
+                aux.setEnlace(nuevo);
+            }
+            this.longitud++;
+        }
+        return exito;
+    }
+
+    public boolean eliminar(int pos) {
+        //Elimina nodo en la posicion pos, enlaza el de pos-1 con pos+1
+        boolean exito = true;
+        if (pos < 1 || this.longitud + 1 < pos) {//Error fuera de rango
+            exito = false;
+        } else {
+            Nodo aux = this.cabecera;
+            if (pos == 1) {
+                this.cabecera = aux.getEnlace();
+            } else {
+                int i = 1;
+                while (i < pos-1) { //Busco nodo anterior al que quiero eliminar
+                    aux = aux.getEnlace(); //Consigue nodo anterior
+                    i++; //En la ultima iteracion, i == pos-1
+                }
+                //Enlazo el aux con el que sigue al de la posicion pos
+                aux.setEnlace(aux.getEnlace().getEnlace());
+            }
+            this.longitud--;
+        }
+        return exito;
+    }
+
+    public Object recuperar(int pos){
+        //Metodo que retorna el elemento del nodo en la posicion pos
+        //Retorna null si la lista esta vacia o si la posicion no apunta a un nodo 
+        Object elemento;
+        if (!this.esVacia() && pos >= 1 && pos <= this.longitud) {//Si no es vacia y se encuentra elemento
+            Nodo aux = this.cabecera;
+            int i = 1;
+            while (i < pos) {//Itero hasta obtener nodo que necesito
+                aux = aux.getEnlace();
+                i++;//En la ultima iteracion, i==pos
+            }
+            elemento = aux.getElemento();
+        } else {//Si no cumple las condiciones, retorna null
+            elemento = null;
+        }
+        return elemento;
+    }
+
+    public int localizar(Object elemento) {
+        //Metodo que retorna la posicion de la primera ocurrencia del elemento ingresado por parametro
+        //Retorna -1 si no se encuentra
+        int pos = -1, i = 1;
+        Nodo aux = this.cabecera;
+        while (i <= this.longitud && pos == -1) {
+            if (elemento == (aux.getElemento())) { //Si hay igualdad, asigna valor a pos
+                pos = i;
+            }
+            aux = aux.getEnlace(); //Obtengo siguiente nodo
+            i++; //Apunto al siguiente nodo
+        }
+        return pos;
+    }
+
+    public void vaciar() {
+        this.cabecera = null;
+    }
+
+    public Lista clone() {
+        //Metodo que retorna un clon de la lista de la invocacion
+        Lista clon = new Lista();
+        if (!this.esVacia()) {
+            clon.longitud = this.longitud;
+            clon.cabecera = cloneR(this.cabecera);
+        }
+        return clon;
+    }
+
+    private Nodo cloneR(Nodo cabeceraO) {
+        //Metodo recursivo que realiza la clonacion de una lista en base a su nodo cabecera
+        //Retorna una copia del nodo cabeceraO con su nodo enlace tambien clonado recursivamente
+        Nodo retorno;
+        //Si el nodo cabecera es null, retorna null
+        if (cabeceraO != null) {
+            //Crea un nodo con el elemento de cabecera y con una copia de su enlace
+            //Su enlace se copia y crea recursivamente
+            retorno = new Nodo(cabeceraO.getElemento(), cloneR(cabeceraO.getEnlace()));
+        } else {
+            retorno = null;
+        }
+        return retorno;
+    }
+
+    public String toString() {
+        String cad;
+        if (!this.esVacia()) {
+            cad = "|"+toStringR(this.cabecera);
+        } else {
+            cad = "||";
+        }
+        return cad;
+    }
+
+    public String toStringR(Nodo nodo) {
+        /*Metodo recursivo que retorna el elemento  de un nodo concatenado
+        al elemento de su enlace*/
+        String cad;
+        if (nodo.getEnlace() == null) {//Si el nodo ingresado en null, entonces es el fin de la lista
+            cad = nodo.getElemento()+"|";
+        } else {
+            cad = nodo.getElemento()+","+ toStringR(nodo.getEnlace());
+        }
+        return cad;
+    }
+
+    
+}
