@@ -21,7 +21,11 @@ public class TestLista {
         System.out.println("Inserta 2. Espera |1,2|.        \t\t " + ((l1.insertar(2,2) ? sOk : sError)) + "\t" + l1.toString());
         System.out.println("Inserta 3. Espera |1,2,3|.      \t\t " + ((l1.insertar(3,3) ? sOk : sError)) + "\t" + l1.toString());
         System.out.println("Inserta 4. Espera |1,2,3,4|.    \t\t " + ((l1.insertar(4,4) ? sOk : sError)) + "\t" + l1.toString());
-        System.out.println("Inserta 5. Espera |1,2,3,4,5|.   \t\t " + ((l1.insertar(5,5) ? sOk : sError)) + "\t" + l1.toString());       
+        System.out.println("Inserta 5. Espera |1,2,3,4,5|.   \t\t " + ((l1.insertar(5,5) ? sOk : sError)) + "\t" + l1.toString());
+        l1.invertir();
+        System.out.println("Invierto lista. Espera |5,4,3,2,1|.\t " + "\t\t" + l1.toString());
+        l1.invertir();
+        System.out.println("Invierto lista. Espera |1,2,3,4,5|.\t " + "\t\t" + l1.toString());
         System.out.println("Inserta x en posicion 3. Espera |1,2,x,3,4,5|.   " + ((l1.insertar("x",3) ? sOk : sError)) + "\t" + l1.toString());
         System.out.println("Inserta x en posicion 1. Espera |x,1,2,x,3,4,5|. " + ((l1.insertar("x",1) ? sOk : sError)) + "\t" + l1.toString());
         System.out.println("Elimina posicion 1. Espera |1,2,x,3,4,5|.\t " + ((l1.eliminar(1) ? sOk : sError)) + "\t" + l1.toString());

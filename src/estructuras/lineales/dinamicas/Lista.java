@@ -145,7 +145,7 @@ public class Lista {
         return cad;
     }
 
-    public String toStringR(Nodo nodo) {
+    private String toStringR(Nodo nodo) {
         /*Metodo recursivo que retorna el elemento  de un nodo concatenado
         al elemento de su enlace*/
         String cad;
@@ -155,6 +155,33 @@ public class Lista {
             cad = nodo.getElemento()+","+ toStringR(nodo.getEnlace());
         }
         return cad;
+    }
+
+    public void invertir() {
+        //Metodo que modifica la lista por su invertida
+        if (this.longitud != 0) {
+            invertirR(this.cabecera,1);
+        }
+    }
+
+    private void invertirR(Nodo nodoPos, int pos) {
+        //Metodo recursivo que invierte una lista a partir de su nodo cabecera
+        //Itera hasta el ultimo nodo, lo establece como cabecera y recursivamente establece sus enlaces
+        //nodoPos: nodo que se encuentra en la posicion pos de la lista
+        //pos: posicion del nodoPos
+        if (pos == this.longitud) { //Asigna ultimo nodo como cabecera
+            this.cabecera = nodoPos;
+        } else {
+            Nodo nodoSig = nodoPos.getEnlace(); //Guarda siguiente nodo
+            if (pos != 1) {
+                invertirR(nodoSig,pos+1);
+                nodoSig.setEnlace(nodoPos); //Se lo establece como enlace de su enlace
+            } else {
+                invertirR(nodoSig,pos+1);
+                nodoSig.setEnlace(nodoPos);
+                nodoPos.setEnlace(null); //Enlaza ultimo nodo con null
+            }
+        }
     }
 
     
