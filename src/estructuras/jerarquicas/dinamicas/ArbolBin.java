@@ -1,6 +1,8 @@
 package estructuras.jerarquicas.dinamicas;
 
 import estructuras.lineales.dinamicas.Nodo;
+import estructuras.lineales.dinamicas.Lista;
+import estructuras.lineales.dinamicas.Cola;
 
 public class ArbolBin {
     
@@ -11,7 +13,6 @@ public class ArbolBin {
     public ArbolBin() {
         this.raiz = null;
     }
-
 
     public boolean insertar(Object elemNuevo, Object elemPadre, boolean lado) {
         boolean exito = true;
@@ -145,6 +146,161 @@ public class ArbolBin {
     public void vaciar() {
         this.raiz = null;
     }
+
+    public ArbolBin clone() {
+        ArbolBin clon = new ArbolBin();
+        clon.raiz = cloneAux(this.raiz);
+        return clon;    
+    }
+
+    private NodoArbol cloneAux(NodoArbol nodoO) {
+        NodoArbol nodoC;
+        if (nodoO != null) {
+            NodoArbol hI,hD;
+            hI = cloneAux(nodoO.getIzquierdo());
+            hD = cloneAux(nodoO.getDerecho());
+            nodoC = new NodoArbol(nodoO.getElemento(), hI, hD);
+        } else {
+            nodoC = null;
+        }
+        return nodoC;
+    }
+
+     
+    public String toString() {
+        return toStringAux(this.raiz);
+    }
+
+    public String toStringAux(NodoArbol nodo) {
+        String cad = "";
+        if (nodo != null) {
+            NodoArbol hI, hD;
+            hI = nodo.getIzquierdo();
+            hD = nodo.getDerecho();
+
+            cad = "\n ("+nodo.getElemento()+") -> ";
+            //Concatena elementos de HI y HD
+            //Verifica si HI es nulo
+            if (hI != null) {
+                cad = cad + " HI: "+hI.getElemento()+" ";
+            } else {
+                cad = cad + " HI: - ";
+            }
+            //Verifica si HD es nulo
+            if (hD != null) {
+                cad = cad + " HD: "+hD.getElemento()+" ";
+            } else {
+                cad = cad + " HD: - ";
+            }
+            //Concatena nodos hijos de HI y HD
+            cad = cad + toStringAux(hI);
+            cad = cad + toStringAux(hD);
+        }
+        return cad;
+    }
+
+    public Lista listarPreorden() {
+        //Metodo que crea una lista con los elementos del arbol en preorden
+        Lista preorden = new Lista();
+        listarPreordenAux(this.raiz, preorden);
+        return preorden;
+    }
+
+    private void listarPreordenAux(NodoArbol nodo, Lista list) {
+        //Metodo que inserta primero la raiz, luego los subarboles izquierdos y por ultimo los subarboles derechos
+        if (nodo != null) {
+            list.insertar(nodo.getElemento(),list.getLongitud()+1);
+            listarPreordenAux(nodo.getIzquierdo(),list);
+            listarPreordenAux(nodo.getDerecho(),list);
+        }
+    }
+
+    public Lista listarPosorden() {
+        //Metodo que crea una lista con los elementos del arbol en posorden
+        Lista posorden = new Lista();
+        listarPosordenAux(this.raiz, posorden);
+        return posorden;
+    }
+
+    private void listarPosordenAux(NodoArbol nodo, Lista list){
+        //Metodo que inserta primero los subarboles izquierdos, luego los subarboles derechos y por ultimo la raiz de los subarboles
+        if (nodo != null) {
+            listarPosordenAux(nodo.getIzquierdo(), list);
+            listarPosordenAux(nodo.getDerecho(), list);
+            list.insertar(nodo.getElemento(), list.getLongitud()+1);
+        }
+    }
+
+    public Lista listarInorden() {
+        //Metodo que crea una lista con los elementos del arbol en inorden
+        Lista inorden = new Lista();
+        listarInordenAux(this.raiz, inorden);
+        return inorden;
+    }
+
+    private void listarInordenAux(NodoArbol nodo, Lista list){
+        //Metodo que inserta primero los subarboles izquierdos, luego la raiz del subarbol y por ultimo los subarboles derechos
+        if (nodo != null) {
+            listarInordenAux(nodo.getIzquierdo(), list);
+            list.insertar(nodo.getElemento(), list.getLongitud()+1);
+            listarInordenAux(nodo.getDerecho(), list);
+        }
+    }
+
+    public Lista listarPorNiveles() {
+        //Retorna lista del arbol en recorrido por niveles
+        Lista porNivel = new Lista();
+        if (this.raiz != null){//Si el arbol no esta vacio
+            Cola colaAux = new Cola();//Guardara los nodos mientras los primeros se insertan
+            colaAux.poner(this.raiz); //Pongo la raiz no nula
+            NodoArbol nodoActual; //Declaro nodoActual para realizar insercion
+            while (!colaAux.esVacia()){ 
+                //Guardo nodo que se encuentra en la colaAux
+                nodoActual = (NodoArbol) colaAux.obtenerFrente();
+                //Saco nodo de cola que sera insertado, mientras guarda los siguientes en la cola
+                colaAux.sacar();
+                //Inserto nodoActual a la lista porNivel
+                porNivel.insertar(nodoActual.getElemento(), porNivel.getLongitud()+1);
+                //Pone los siguiente nodos en la cola, de izquierda a derecha
+                NodoArbol hI = nodoActual.getIzquierdo();
+                NodoArbol hD = nodoActual.getDerecho();
+                if (hI != null){
+                    colaAux.poner(hI);
+                }
+                if (hD != null){
+                    colaAux.poner(hD);
+                }
+            }
+        }
+        return porNivel;
+    }
+
+    //Ejercicios apunte
+    public Lista frontera(){
+        //Metodo que retorna una lista con las hojas de un arbol, de izquierda a derecha
+        Lista hojas = new Lista();
+        if (!this.esVacio()) {
+            fronteraAux(this.raiz, hojas);
+        }
+        return hojas;
+    }
+
+    public void fronteraAux(NodoArbol nodo, Lista hojas) {
+        //Metodo que crea una lista con las hojas del arbol (nodos sin hijos)
+        NodoArbol hI = nodo.getIzquierdo(), hD = nodo.getDerecho(); //Asigna hijos de nodo
+        boolean tieneHI = hD != null, tieneHD = hD != null; //Verifica si son nulos
+        if (!tieneHI && !tieneHD) { //Si ambos hijos son nulos, entonces se inserta
+            hojas.insertar(nodo.getElemento(), hojas.getLongitud()+1);
+        } else { //Si alguno no es nulo
+            if (tieneHI) { //Verifica los hijos de HI, si son hojas, los inserta primero
+                fronteraAux(hI, hojas);
+            }
+            if (tieneHD) { //Verifica los hijos de HD, si son hojas, los inserta luego de HI
+                fronteraAux(hD, hojas);
+            }
+        }
+    }
+
 
     
 }

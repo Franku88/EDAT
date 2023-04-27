@@ -5,7 +5,7 @@ import estructuras.jerarquicas.dinamicas.ArbolBin;
 public class TestArbolBin {
     public static void main(String[] args){
 
-        ArbolBin arbol = new ArbolBin();
+        ArbolBin arbol = new ArbolBin(), arbolClon;
 
         cargarArbolBin(arbol);
         System.out.println("Arbol vacio: "+ arbol.esVacio());
@@ -13,6 +13,18 @@ public class TestArbolBin {
         System.out.println("Altura del nodo 3, espera 1: "+ arbol.nivel(3));
         System.out.println("Altura del nodo 4, espera 2: "+ arbol.nivel(4));
         System.out.println("Altura del nodo 6: espera 3: "+ arbol.nivel(8));
+        System.out.println(arbol.toString());
+        System.out.println("Listado (Por niveles): "+arbol.listarPorNiveles().toString());
+        System.out.println("Frontera, espera |8,9,10,11,6,7|: " + arbol.frontera().toString());
+
+        /*
+        arbolClon = arbol.clone();
+        System.out.println("Clon vacio: "+ arbolClon.esVacio());
+        System.out.println("Altura del clon. Espera 3: "+ arbolClon.altura());
+        System.out.println("Altura del nodo 3, espera 1: "+ arbolClon.nivel(3));
+        System.out.println("Altura del nodo 4, espera 2: "+ arbolClon.nivel(4));
+        System.out.println("Altura del nodo 6: espera 3: "+ arbolClon.nivel(8));
+         */
     }
     
     public static void cargarArbolBin(ArbolBin arbol) {
