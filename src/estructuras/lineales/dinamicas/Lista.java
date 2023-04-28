@@ -57,18 +57,20 @@ public class Lista {
             exito = false;
         } else {
             Nodo aux = this.cabecera;
-            if (pos == 1) {
-                this.cabecera = aux.getEnlace();
-            } else {
-                int i = 1;
-                while (i < pos-1) { //Busco nodo anterior al que quiero eliminar
-                    aux = aux.getEnlace(); //Consigue nodo anterior
-                    i++; //En la ultima iteracion, i == pos-1
+            if (aux != null) {
+                if (pos == 1) {
+                    this.cabecera = aux.getEnlace();
+                } else {
+                    int i = 1;
+                    while (i < pos-1) { //Busco nodo anterior al que quiero eliminar
+                        aux = aux.getEnlace(); //Consigue nodo anterior
+                        i++; //En la ultima iteracion, i == pos-1
+                    }
+                    //Enlazo el aux con el que sigue al de la posicion pos
+                    aux.setEnlace(aux.getEnlace().getEnlace());
                 }
-                //Enlazo el aux con el que sigue al de la posicion pos
-                aux.setEnlace(aux.getEnlace().getEnlace());
+                this.longitud--;
             }
-            this.longitud--;
         }
         return exito;
     }
