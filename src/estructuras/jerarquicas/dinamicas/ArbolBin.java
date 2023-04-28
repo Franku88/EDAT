@@ -1,6 +1,5 @@
 package estructuras.jerarquicas.dinamicas;
 
-import estructuras.lineales.dinamicas.Nodo;
 import estructuras.lineales.dinamicas.Lista;
 import estructuras.lineales.dinamicas.Cola;
 
@@ -301,6 +300,60 @@ public class ArbolBin {
         }
     }
 
+    public Lista listarAncestros(Object elem) {
+        Lista ancestros = new Lista();
+        if (!this.esVacio()) {
+            listarAncestrosAux(this.raiz, ancestros, elem);
+        }
+        return ancestros;
+    }   
 
-    
+    public boolean listarAncestrosAux(NodoArbol nodo, Lista list, Object elem) {
+        //Metodo que retorna un boolean si se encuentra elem en nodo
+        //Si encuentra el elemento en primera intancia, retorna el resultado
+        //Si en las siguientes invocaciones lo encuentra, lista los elementos
+        boolean encontrado = false;
+        if (nodo != null) {
+            Object nElem = nodo.getElemento();
+            encontrado = (nElem.equals(elem));
+            if (!encontrado) { //Si no lo encuentra, busca por HI
+                encontrado = listarAncestrosAux(nodo.getIzquierdo(), list, elem);
+                if (!encontrado) { //Si no lo encuentra, busca por HD
+                    encontrado = listarAncestrosAux(nodo.getDerecho(), list, elem);
+                    if (encontrado) { //Si lo encuentra, lista elementos
+                        list.insertar(nElem, list.getLongitud()+1);
+                    }
+                } else { //Si lo encuentra, lista elementos
+                    list.insertar(nElem, list.getLongitud()+1);
+                }
+            }
+        }
+        return encontrado;
+    }
+
+    public Lista listarDescendientes(Object elem) {
+        Lista descendientes = new Lista();
+        if (!this.esVacio()) {
+            listarDescendientes(this.raiz, descendientes, elem, false);
+        }
+        return descendientes;
+    }   
+
+    public void listarDescendientes(NodoArbol nodo, Lista list, Object elem, boolean encontrado) {
+        
+        if (nodo != null) {
+            Object nElem = nodo.getElemento();
+            if (!encontrado) {
+                encontrado = (nElem.equals(elem));
+                listarDescendientes(nodo.getIzquierdo(), list, elem, encontrado);
+                listarDescendientes(nodo.getDerecho(), list, elem, encontrado);
+            } else {
+                list.insertar(nElem, list.getLongitud()+1);
+                listarDescendientes(nodo.getIzquierdo(), list, elem, encontrado);
+                listarDescendientes(nodo.getDerecho(), list, elem, encontrado);
+            }
+
+        }
+    }
+
 }
