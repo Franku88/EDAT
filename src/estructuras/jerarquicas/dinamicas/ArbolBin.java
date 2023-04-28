@@ -70,29 +70,30 @@ public class ArbolBin {
         return this.raiz == null;
     }
 
-    public Object padre(Object elem) {
-        //Metodo que retorna el elemento del nodo padre, del elemento nodo hijo
-        Object elemPadre;
-        elemPadre = padreAux(this.raiz, elem).getElemento();
-        return elemPadre;
-    } 
+    public Object padre(Object hijo){
+        Object padre = null;
+        if (this.raiz != null){
+            //Envio al padre null en caso de que este hijo sea la raiz (no tiene padre)
+            padre = obtenerPadre(this.raiz, hijo, null); 
+        }
+        return padre; 
+    }
 
-    private NodoArbol padreAux(NodoArbol nodo, Object buscado) {
-        //Metodo que retorna nodo padre del nodo contenedor del elemento buscado
-        //Si no se encuentra, retorna null
-        NodoArbol padre = null;
-        boolean esPadre = (nodo.getIzquierdo().getElemento() == buscado) || (nodo.getDerecho().getElemento() == buscado);
-        if (esPadre) {
-            padre = nodo;
-        } else {
-            //Si no es el padre buscado, busca en HI
-            padre = padreAux(nodo.getIzquierdo(), buscado);
-            //Si no lo encuentra, busca en HD
-            if (padre == null) {
-                padre = padreAux(nodo.getDerecho(), buscado);
+    private Object obtenerPadre(NodoArbol nodo, Object hijo, Object padreAux){
+        //Dado un elem (hijo) devuelve el valor del nodo padre
+        Object ret = null; 
+
+        if (nodo != null){ 
+            if (nodo.getElemento().equals(hijo)){ //elemento encontrado, retorno el padre del parametro
+                ret = padreAux;
+            } else {
+                ret = obtenerPadre(nodo.getIzquierdo(), hijo, nodo.getElemento()); //evaluo lado izq y guardando en padreAux el elem actual
+                if (ret == null){ //si no se encontro evaluo el der
+                    ret = obtenerPadre(nodo.getDerecho(), hijo, nodo.getElemento());
+                }
             }
         }
-        return padre;
+        return ret;
     }
 
     public int altura() {
@@ -172,7 +173,6 @@ public class ArbolBin {
         return nodoC;
     }
 
-     
     public String toString() {
         return toStringAux(this.raiz);
     }
@@ -293,16 +293,18 @@ public class ArbolBin {
 
     public void fronteraAux(NodoArbol nodo, Lista hojas) {
         //Metodo que crea una lista con las hojas del arbol (nodos sin hijos)
-        NodoArbol hI = nodo.getIzquierdo(), hD = nodo.getDerecho(); //Asigna hijos de nodo
-        boolean tieneHI = hD != null, tieneHD = hD != null; //Verifica si son nulos
-        if (!tieneHI && !tieneHD) { //Si ambos hijos son nulos, entonces se inserta
-            hojas.insertar(nodo.getElemento(), hojas.longitud()+1);
-        } else { //Si alguno no es nulo
-            if (tieneHI) { //Verifica los hijos de HI, si son hojas, los inserta primero
-                fronteraAux(hI, hojas);
-            }
-            if (tieneHD) { //Verifica los hijos de HD, si son hojas, los inserta luego de HI
-                fronteraAux(hD, hojas);
+        if (nodo != null) {
+            NodoArbol hI = nodo.getIzquierdo(), hD = nodo.getDerecho(); //Asigna hijos de nodo
+            boolean tieneHI = hI != null, tieneHD = hD != null; //Verifica si son nulos
+            if (!tieneHI && !tieneHD) { //Si ambos hijos son nulos, entonces se inserta
+                hojas.insertar(nodo.getElemento(), hojas.longitud()+1);
+            } else { //Si alguno no es nulo
+                if (tieneHI) { //Verifica los hijos de HI, si son hojas, los inserta primero
+                    fronteraAux(hI, hojas);
+                }
+                if (tieneHD) { //Verifica los hijos de HD, si son hojas, los inserta luego de HI
+                    fronteraAux(hD, hojas);
+                }
             }
         }
     }
