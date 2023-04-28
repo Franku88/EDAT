@@ -3,7 +3,7 @@ package estructuras.lineales.testing;
 //import estructuras.lineales.estaticas.Cola;
 import estructuras.lineales.dinamicas.Cola;
 
-public class testingCola {
+public class TestingCola {
 
 	/**
 	 *

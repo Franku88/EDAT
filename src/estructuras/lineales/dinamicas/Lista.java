@@ -14,7 +14,7 @@ public class Lista {
         this.longitud = 0;
     }
 
-    public int getLongitud() {
+    public int longitud() {
         //Retorna longitud de la lista
         return this.longitud;
     }
@@ -183,6 +183,4 @@ public class Lista {
             }
         }
     }
-
-    
 }

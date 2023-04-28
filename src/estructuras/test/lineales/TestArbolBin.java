@@ -30,22 +30,22 @@ public class TestArbolBin {
     }
     
     public static void cargarArbolBin(ArbolBin arbol) {
-        arbol.insertar(1, null, false);
+        arbol.insertar(1, null, 'I');
 
-        arbol.insertar(2, 1, false);
-        arbol.insertar(3, 1, true);
+        arbol.insertar(2, 1, 'I');
+        arbol.insertar(3, 1, 'D');
 
-        arbol.insertar(4, 2, false);
-        arbol.insertar(5, 2, true);
+        arbol.insertar(4, 2, 'I');
+        arbol.insertar(5, 2, 'D');
 
-        arbol.insertar(6, 3, false);
-        arbol.insertar(7, 3, true);
+        arbol.insertar(6, 3, 'I');
+        arbol.insertar(7, 3, 'D');
 
-        arbol.insertar(8, 4, false);
-        arbol.insertar(9, 4, true);
+        arbol.insertar(8, 4, 'I');
+        arbol.insertar(9, 4, 'D');
 
-        arbol.insertar(10, 5, false);
-        arbol.insertar(11, 5, true);
+        arbol.insertar(10, 5, 'I');
+        arbol.insertar(11, 5, 'D');
     }
 
 

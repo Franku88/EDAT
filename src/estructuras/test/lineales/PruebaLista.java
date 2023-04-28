@@ -91,7 +91,7 @@ public class PruebaLista {
         //Concatena l1 en listaC
         concatenarR(listaC,l1,1,1);
         //Concatena l2 en listaC, desde donde quedo en la invocacion anterior
-        concatenarR(listaC,l2,l1.getLongitud()+1,1);
+        concatenarR(listaC,l2,l1.longitud()+1,1);
         return listaC;
     }
 
@@ -102,7 +102,7 @@ public class PruebaLista {
         //pC apunta a posicion donde insertar en la listaC
         //pO apunta a posicion donde recuperar de la listaO
         Object nuevo = listaO.recuperar(pO);
-        if (listaO.getLongitud() == pO) {
+        if (listaO.longitud() == pO) {
             listaC.insertar(nuevo,pC);
         } else {
             listaC.insertar(nuevo,pC);
@@ -116,9 +116,9 @@ public class PruebaLista {
         int lim = list.localizar(0);
         /*Como es de la forma cad0cad0cadI, entonces la posicion del primer 0
         depende de la longitud de list,es decir 3*longitud(list)+2*/
-        if (lim == ((list.getLongitud()-2)/3)+1) {
+        if (lim == ((list.longitud()-2)/3)+1) {
             if (lim != 1) {
-                int i = 1, j = list.getLongitud();
+                int i = 1, j = list.longitud();
                 comp = true;
                 while (i < lim && comp) {
                     Object elem = list.recuperar(i);
@@ -135,7 +135,7 @@ public class PruebaLista {
 
     public static Lista invertir(Lista listO) {
         Lista listI = new Lista();
-        if (listO.getLongitud() > 0) {
+        if (listO.longitud() > 0) {
             Pila pile = new Pila();
             invertirR(listI, listO, pile, 1);
         }
@@ -144,12 +144,12 @@ public class PruebaLista {
 
     public static void invertirR(Lista listI, Lista listO, Pila pile, int pos) {
         Object elem = listO.recuperar(pos);
-        if (pos == listO.getLongitud()) {
-            listI.insertar(elem,listI.getLongitud()+1);
+        if (pos == listO.longitud()) {
+            listI.insertar(elem,listI.longitud()+1);
         } else {
             pile.apilar(elem);
             invertirR(listI, listO, pile, pos+1);
-            listI.insertar(pile.obtenerTope(),listI.getLongitud()+1);
+            listI.insertar(pile.obtenerTope(),listI.longitud()+1);
             pile.desapilar();
         }
     }

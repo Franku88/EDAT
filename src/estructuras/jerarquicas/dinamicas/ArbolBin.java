@@ -13,7 +13,14 @@ public class ArbolBin {
         this.raiz = null;
     }
 
-    public boolean insertar(Object elemNuevo, Object elemPadre, boolean lado) {
+    /**
+     * 
+     * @param elemNuevo
+     * @param elemPadre
+     * @param lado I (Hijo izquierdo), D (Hijo derecho)
+     * @return 
+     */
+    public boolean insertar(Object elemNuevo, Object elemPadre, char lado) {
         boolean exito = true;
 
         if (this.raiz == null) {
@@ -25,9 +32,9 @@ public class ArbolBin {
 
             //Si padre existe y lugar no esta ocupado lo pone, si no da error
             if (nodoPadre != null) {
-                if (!lado && nodoPadre.getIzquierdo() == null) {
+                if (lado == 'I' && nodoPadre.getIzquierdo() == null) {
                     nodoPadre.setIzquierdo(new NodoArbol(elemNuevo, null, null));
-                } else if(lado && nodoPadre.getDerecho() == null) {
+                } else if(lado == 'D' && nodoPadre.getDerecho() == null) {
                     nodoPadre.setDerecho(new NodoArbol(elemNuevo, null, null));
                 } else {
                     exito = false;
@@ -208,7 +215,7 @@ public class ArbolBin {
     private void listarPreordenAux(NodoArbol nodo, Lista list) {
         //Metodo que inserta primero la raiz, luego los subarboles izquierdos y por ultimo los subarboles derechos
         if (nodo != null) {
-            list.insertar(nodo.getElemento(),list.getLongitud()+1);
+            list.insertar(nodo.getElemento(),list.longitud()+1);
             listarPreordenAux(nodo.getIzquierdo(),list);
             listarPreordenAux(nodo.getDerecho(),list);
         }
@@ -226,7 +233,7 @@ public class ArbolBin {
         if (nodo != null) {
             listarPosordenAux(nodo.getIzquierdo(), list);
             listarPosordenAux(nodo.getDerecho(), list);
-            list.insertar(nodo.getElemento(), list.getLongitud()+1);
+            list.insertar(nodo.getElemento(), list.longitud()+1);
         }
     }
 
@@ -241,7 +248,7 @@ public class ArbolBin {
         //Metodo que inserta primero los subarboles izquierdos, luego la raiz del subarbol y por ultimo los subarboles derechos
         if (nodo != null) {
             listarInordenAux(nodo.getIzquierdo(), list);
-            list.insertar(nodo.getElemento(), list.getLongitud()+1);
+            list.insertar(nodo.getElemento(), list.longitud()+1);
             listarInordenAux(nodo.getDerecho(), list);
         }
     }
@@ -259,7 +266,7 @@ public class ArbolBin {
                 //Saco nodo de cola que sera insertado, mientras guarda los siguientes en la cola
                 colaAux.sacar();
                 //Inserto nodoActual a la lista porNivel
-                porNivel.insertar(nodoActual.getElemento(), porNivel.getLongitud()+1);
+                porNivel.insertar(nodoActual.getElemento(), porNivel.longitud()+1);
                 //Pone los siguiente nodos en la cola, de izquierda a derecha
                 NodoArbol hI = nodoActual.getIzquierdo();
                 NodoArbol hD = nodoActual.getDerecho();
@@ -289,7 +296,7 @@ public class ArbolBin {
         NodoArbol hI = nodo.getIzquierdo(), hD = nodo.getDerecho(); //Asigna hijos de nodo
         boolean tieneHI = hD != null, tieneHD = hD != null; //Verifica si son nulos
         if (!tieneHI && !tieneHD) { //Si ambos hijos son nulos, entonces se inserta
-            hojas.insertar(nodo.getElemento(), hojas.getLongitud()+1);
+            hojas.insertar(nodo.getElemento(), hojas.longitud()+1);
         } else { //Si alguno no es nulo
             if (tieneHI) { //Verifica los hijos de HI, si son hojas, los inserta primero
                 fronteraAux(hI, hojas);
@@ -321,10 +328,10 @@ public class ArbolBin {
                 if (!encontrado) { //Si no lo encuentra, busca por HD
                     encontrado = listarAncestrosAux(nodo.getDerecho(), list, elem);
                     if (encontrado) { //Si lo encuentra, lista elementos
-                        list.insertar(nElem, list.getLongitud()+1);
+                        list.insertar(nElem, list.longitud()+1);
                     }
                 } else { //Si lo encuentra, lista elementos
-                    list.insertar(nElem, list.getLongitud()+1);
+                    list.insertar(nElem, list.longitud()+1);
                 }
             }
         }
@@ -348,12 +355,11 @@ public class ArbolBin {
                 listarDescendientes(nodo.getIzquierdo(), list, elem, encontrado);
                 listarDescendientes(nodo.getDerecho(), list, elem, encontrado);
             } else {
-                list.insertar(nElem, list.getLongitud()+1);
+                list.insertar(nElem, list.longitud()+1);
                 listarDescendientes(nodo.getIzquierdo(), list, elem, encontrado);
                 listarDescendientes(nodo.getDerecho(), list, elem, encontrado);
             }
 
         }
     }
-
 }

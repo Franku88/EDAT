@@ -16,7 +16,7 @@ public class TestLista {
         Lista l1 = new Lista(), clon;
         System.out.println("Lista creada.                          \t\t " + sOk + "\t");
         System.out.println("Verifica si es vacia. Espera true.     \t\t " + ((l1.esVacia()) ? sOk : sError) + "\t");
-        System.out.println("Verifica longitud. Espera 0            \t\t " + ((l1.getLongitud() == 0) ? sOk : sError) + "\t");
+        System.out.println("Verifica longitud. Espera 0            \t\t " + ((l1.longitud() == 0) ? sOk : sError) + "\t");
         System.out.println("Inserta 1. Espera |1|.          \t\t " + ((l1.insertar(1,1) ? sOk : sError)) + "\t" + l1.toString());
         System.out.println("Inserta 2. Espera |1,2|.        \t\t " + ((l1.insertar(2,2) ? sOk : sError)) + "\t" + l1.toString());
         System.out.println("Inserta 3. Espera |1,2,3|.      \t\t " + ((l1.insertar(3,3) ? sOk : sError)) + "\t" + l1.toString());
@@ -48,5 +48,4 @@ public class TestLista {
         System.out.println("Localizo posicion de 0. Espera -1.        \t\t" + clon.localizar(0));
         System.out.println("Localizo en lista vacia. Espera -1.       \t\t" + l1.localizar(0));           
     }
-
 }

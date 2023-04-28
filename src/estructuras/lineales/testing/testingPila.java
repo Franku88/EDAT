@@ -9,7 +9,7 @@ import estructuras.lineales.dinamicas.Pila;
  * Ultima modificación: 22/04/2021
  *
  */
-public class testingPila {
+public class TestingPila {
 
     static String sOk = "OK!", sErr = "ERROR";
 
