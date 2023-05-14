@@ -93,19 +93,25 @@ public class Lista {
         return elemento;
     }
 
-    public int localizar(Object elemento) {
-        //Metodo que retorna la posicion de la primera ocurrencia del elemento ingresado por parametro
-        //Retorna -1 si no se encuentra
-        int pos = -1, i = 1;
-        Nodo aux = this.cabecera;
-        while (i <= this.longitud && pos == -1) {
-            if (elemento == (aux.getElemento())) { //Si hay igualdad, asigna valor a pos
-                pos = i;
-            }
-            aux = aux.getEnlace(); //Obtengo siguiente nodo
-            i++; //Apunto al siguiente nodo
-        }
+    public int localizar(Object elem){
+        //Metodo que retorna la poisicion en la lista de la primer ocurrencia de elem
+        int pos = localizarAux(this.cabecera, elem, 1);
         return pos;
+    }
+
+    private int localizarAux(Nodo nodo, Object elem, int pos){
+        //Modulo auxiliar de localizar
+        int ret;
+        if (nodo != null) {
+            if (nodo.getElemento() == elem){ //Elemento encontrado, retorna pos
+                ret = pos;
+            } else { //Si no se encontro, compara con siguiente nodo
+                ret = localizarAux(nodo.getEnlace(), elem, pos+1);
+            }
+        } else {
+            ret = -1;
+        }
+        return ret;
     }
 
     public void vaciar() {

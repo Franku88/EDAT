@@ -31,20 +31,19 @@ public class ArbolGen {
     private NodoGen obtenerNodo(NodoGen nodo, Object elem){
         //Metodo que busca la primera aparicion del nodo que contiene a elem
         NodoGen ret = null; 
-
         if (nodo != null){
             if (nodo.getElem() == elem){
                 ret = nodo;
             } else {
-                NodoGen hijo = nodo.getHijoIzquierdo(); //guardo el primer hijo
+                NodoGen hijo = nodo.getHijoIzquierdo(); //Guardo el primer hijo
                 boolean flag = false;
 
-                while (!flag && hijo != null){ //si no ha sido encontrado y no se terminaron sus hijos
+                while (!flag && hijo != null){ //Si no ha sido encontrado y no se terminaron sus hijos
                     ret = obtenerNodo(hijo, elem);
                     if (ret != null){ //Nodo encontrado, salgo de la repetitiva
                         flag = true;
                     } else {
-                        hijo = hijo.getHermanoDerecho(); //me muevo a su hermano
+                        hijo = hijo.getHermanoDerecho(); //Me muevo a su hermano
                     }
                 } 
                 
@@ -54,6 +53,7 @@ public class ArbolGen {
     } 
 
     public boolean pertenece(Object elem) {
+        //Metodo que verifica si un elemento pertenece al arbol generico
         boolean existe = false;
         if (!this.esVacio()) {
             existe = perteneceAux(this.raiz, elem);
@@ -62,6 +62,7 @@ public class ArbolGen {
     }
 
     private boolean perteneceAux(NodoGen nodo, Object elem){
+        //Metodo auxiliar de pertenece
         boolean existe = false;
         if (nodo != null) {
             existe = nodo.getElem().equals(elem); //Verifica si nodo tiene elem
@@ -75,88 +76,14 @@ public class ArbolGen {
         return existe;
     }
 
-    public Lista ancestros(Object elem) {
-        Lista ancest = new Lista();
-        if (!this.esVacio()) {
-            ancestrosAux(this.raiz, elem, ancest);
-        }
-        return ancest;
-    }
-
-    private boolean ancestrosAux(NodoGen nodo, Object elem, Lista ancest) {
-        boolean encontrado = false;
-        if (nodo != null) {
-            if (elem.equals(nodo.getElem())){ //si encuentro el elem
-                encontrado = true;
-            } else { //si no es igual busco en sus hijos
-                NodoGen hijo = nodo.getHijoIzquierdo();
-                while (hijo != null && !encontrado) { //mientras hijo exista y elem no sea encontrado entonces
-                    encontrado = ancestrosAux(hijo, elem, ancest);
-                    if (encontrado){ //si fue encontrado inserto
-                        ancest.insertar(nodo.getElem(), 1);
-                    } else {
-                        hijo = hijo.getHermanoDerecho(); //si no es encontrado me muevo a su hermano
-                    }
-                }
-            }
-        }
-        return encontrado;
-    }
-
     public boolean esVacio() {
+        //Metodo que retorna verdadero si el arbol esta vacio
         return this.raiz == null;
     }     
 
     public void vaciar() {
+        //Metodo que vacia un arbol generico
         this.raiz = null;
-    }
-
-    public int altura(){
-        //devuelve la altura del arbol
-        return alturaAux(this.raiz);
-    }
-
-    private int alturaAux(NodoGen nodo){
-        int ret = -1; 
-        if (nodo != null){ //si no es vacio
-            NodoGen hijo = nodo.getHijoIzquierdo();
-            int aux;
-            while (hijo != null){ //mientras tenga hijos, calculo sus alturas
-               aux = alturaAux(hijo);
-                if (ret < aux){ //busco el mas grande
-                    ret = aux;
-                }
-                hijo = hijo.getHermanoDerecho(); //me muevo a su hermano
-            }
-            ret++; //sumo la altura del nodo     
-        }
-        return ret;
-    }
-
-    public int nivel(Object elem) {
-        return nivelAux(this.raiz, elem, 0);
-    }
-
-    private int nivelAux(NodoGen nodo, Object elem, int lvl){
-        //metodo que retorna el nivel de elem 
-        int ret = -1;
-        if (nodo != null){ 
-            if (nodo.getElem().equals(elem)){
-                ret = lvl; //elem encontrado, ret lvl
-            } else {
-                NodoGen hijo = nodo.getHijoIzquierdo(); //primer hijo
-                boolean flag = false;
-                while (hijo != null && !flag){ //recorro hijos hasta encontrar el elem
-                    ret = nivelAux(hijo, elem, lvl + 1);
-                    if (ret != -1){  //si es distinto entonces ya se encontro y dejo de recorrer
-                        flag = true;
-                    } else {
-                        hijo = hijo.getHermanoDerecho(); //me muevo a su hermano
-                    }
-                }
-            }
-        }
-        return ret;
     }
 
     public Object padre(Object elem){ 
@@ -186,53 +113,114 @@ public class ArbolGen {
         return ret;
     }
 
-    public String toString(){
-        //Crea un string del arbol actual
-        String ret; 
-        if (this.raiz == null){
-            ret = "Arbol Vacio";
-        } else {
-            ret = toStringAux(this.raiz);
+    public int altura(){
+        //Metodo que retorna la altura del arbol
+        return alturaAux(this.raiz);
+    }
+
+    private int alturaAux(NodoGen nodo){
+        //Metodo auxiliar de altura
+        int ret = -1; 
+        if (nodo != null){ //si no es vacio
+            NodoGen hijo = nodo.getHijoIzquierdo();
+            int aux;
+            while (hijo != null){ //mientras tenga hijos, calculo sus alturas
+               aux = alturaAux(hijo);
+                if (ret < aux){ //busco el mas grande
+                    ret = aux;
+                }
+                hijo = hijo.getHermanoDerecho(); //me muevo a su hermano
+            }
+            ret++; //sumo la altura del nodo     
         }
         return ret;
     }
 
-    private String toStringAux(NodoGen nodo){ 
-        /*Metodo aux toString, concatena el nodo actual y sus hijos, 
-        luego lo hace recursivamente con sus hijos*/
-        String ret = "";
-        if (nodo != null){
-            NodoGen hijo = nodo.getHijoIzquierdo(); //Guardo hijo ext izq
-            ret = ret + nodo.getElem()+ ")  ->  ";
-            
-            if (hijo == null){ //Si no tiene hijos
-                ret = ret + "[Hoja]";
+    public int nivel(Object elem) {
+        //Metodo que retorna el nivel de elem ingresado
+        return nivelAux(this.raiz, elem, 0);
+    }
+
+    private int nivelAux(NodoGen nodo, Object elem, int lvl){
+        //Metodo auxiliar de nivel
+        int ret = -1;
+        if (nodo != null){ 
+            if (nodo.getElem().equals(elem)){
+                ret = lvl; //elem encontrado
             } else {
-                while (hijo != null){  //Si tiene hijos
-                    ret = ret + hijo.getElem(); //Concateno hijo
-                    hijo = hijo.getHermanoDerecho(); //Siguiente hijo
-                    if (hijo != null){
-                        ret = ret + ", ";
+                NodoGen hijo = nodo.getHijoIzquierdo(); //primer hijo
+                boolean flag = false;
+                while (hijo != null && !flag){ //recorro hijos hasta encontrar el elem
+                    ret = nivelAux(hijo, elem, lvl + 1);
+                    if (ret != -1){  //si es distinto entonces ya se encontro y dejo de recorrer
+                        flag = true;
+                    } else {
+                        hijo = hijo.getHermanoDerecho(); //me muevo a su hermano
                     }
-                }
-                hijo = nodo.getHijoIzquierdo(); //Vuelvo al primer hijo
-                //Concatena hijos de sus hijos recursivamente
-                while (hijo != null){
-                    ret = ret + "\n"+toStringAux(hijo);
-                    hijo = hijo.getHermanoDerecho();
                 }
             }
         }
         return ret;
     }
 
+    public Lista ancestros(Object elem) {
+        //Metodo que retorna una lista con los ancestros de un elemento ingresado
+        Lista ancest = new Lista();
+        if (!this.esVacio()) {
+            ancestrosAux(this.raiz, elem, ancest);
+        }
+        return ancest;
+    }
+
+    private boolean ancestrosAux(NodoGen nodo, Object elem, Lista ancest) {
+        //Metodo auxiliar de ancestros
+        boolean encontrado = false;
+        if (nodo != null) {
+            if (elem.equals(nodo.getElem())){
+                encontrado = true;
+            } else { //Si no contiene elem, busca en sus hijos
+                NodoGen hijo = nodo.getHijoIzquierdo();
+                while (hijo != null && !encontrado) { //Mientras hijo exista y elem no sea encontrado entonces
+                    encontrado = ancestrosAux(hijo, elem, ancest);
+                    if (encontrado){ //Si fue encontrado inserto
+                        ancest.insertar(nodo.getElem(), 1);
+                    } else {
+                        hijo = hijo.getHermanoDerecho(); //Si no es encontrado me muevo a su hermano
+                    }
+                }
+            }
+        }
+        return encontrado;
+    }
+
+    public ArbolGen clone() {
+        //Metodo que clona el arbol actual
+        ArbolGen clon = new ArbolGen();
+        clon.raiz = cloneAux(this.raiz);
+        return clon;
+    }
+
+    private NodoGen cloneAux(NodoGen nodo){
+        //Metodo auxiliar de clone
+        NodoGen nClon;
+        if (nodo != null) {
+            //Crea una copia del nodo con su hijo y hermano, recursivamente
+            nClon = new NodoGen(nodo.getElem(), cloneAux(nodo.getHijoIzquierdo()), cloneAux(nodo.getHermanoDerecho()));
+        } else {
+            nClon = null;
+        }
+        return nClon;
+    }
+
     public Lista listarPreorden(){
+        //Crea una lista en preorden del arbol actual
         Lista list = new Lista();
         preordenAux(this.raiz, list);
         return list;
     }
 
     private void preordenAux(NodoGen nodo, Lista list) {
+        //Metodo auxiliar de listarPreorden
         if (nodo != null) {
             list.insertar(nodo.getElem(), list.longitud()+1);
             preordenAux(nodo.getHijoIzquierdo(), list);
@@ -241,12 +229,14 @@ public class ArbolGen {
     }
 
     public Lista listarInorden(){
+        //Crea una lista en inorden del arbol actual
         Lista list = new Lista();
         inordenAux(this.raiz, list);
         return list;
     }
 
     private void inordenAux(NodoGen nodo, Lista list) {
+        //Metodo auxiliar de listarInorden
         if (nodo != null) {
             NodoGen hijo = nodo.getHijoIzquierdo();
 
@@ -266,13 +256,16 @@ public class ArbolGen {
             }
         }
     }
+
     public Lista listarPosorden(){
+        //Crea una lista en posorden del arbol actual
         Lista list = new Lista();
         posordenAux(this.raiz, list);
         return list;
     }
 
     private void posordenAux(NodoGen nodo, Lista list) {
+        //Metodo auxiliar de listarPosorden
         if (nodo != null) {
             posordenAux(nodo.getHijoIzquierdo(), list);
             list.insertar(nodo.getElem(), list.longitud()+1);
@@ -304,5 +297,132 @@ public class ArbolGen {
         }
         return list;
     }
+
+    public String toString(){
+        //Crea un string del arbol actual
+        String cadena; 
+        if (this.raiz == null){
+            cadena = "Arbol Vacio";
+        } else {
+            cadena = toStringAux(this.raiz);
+        }
+        return cadena;
+    }
+
+    private String toStringAux(NodoGen nodo){ 
+        /*Metodo aux toString, concatena el nodo actual y sus hijos, 
+        luego lo hace recursivamente con sus hijos*/
+        String cadena = "";
+        if (nodo != null){
+            NodoGen hijo = nodo.getHijoIzquierdo(); //Guardo hijo ext izq
+            cadena = cadena + nodo.getElem()+ ")  ->  ";
+            
+            if (hijo == null){ //Si no tiene hijos
+                cadena = cadena + "[Hoja]";
+            } else {
+                while (hijo != null){  //Si tiene hijos
+                    cadena = cadena + hijo.getElem(); //Concateno hijo
+                    hijo = hijo.getHermanoDerecho(); //Siguiente hijo
+                    if (hijo != null){
+                        cadena = cadena + ", ";
+                    }
+                }
+                hijo = nodo.getHijoIzquierdo(); //Vuelvo al primer hijo
+                //Concatena hijos de sus hijos recursivamente
+                while (hijo != null){
+                    cadena = cadena + "\n"+toStringAux(hijo);
+                    hijo = hijo.getHermanoDerecho();
+                }
+            }
+        }
+        return cadena;
+    }
+
+    public Lista frontera(){
+        //Metodo que retorna una lista con las hojas del arbol actual
+        Lista list = new Lista();
+        fronteraAux(this.raiz, list);
+        return list;
+    }
+
+    private void fronteraAux(NodoGen nodo, Lista list){
+        //Metodo auxiliar de frontera
+        if (nodo != null){
+            NodoGen hijo = nodo.getHijoIzquierdo();
+            if (hijo == null){ //Si no tiene hijos, lo inserto en list
+                list.insertar(nodo.getElem(), 1);
+            } else { //Si tiene hijos, invoco recurisvamente con los mismos
+                while (hijo != null){
+                    fronteraAux(hijo, list);
+                    hijo = hijo.getHermanoDerecho();
+                }
+            }
+        }
+    }
+
+    //Ejercicios del TPO
+    public boolean sonFrontera(Lista unaLista) {
+        /*Metodo que verifica si los elementos de la lista ingresada son hojas en el arbol actual,
+        unaLista no puede contener elementos repetidos, si los tiene, entonces la lista quedara no vacia
+        al final de la ejecucion y retornara falso*/
+        boolean esFrontera;
+        if (unaLista.esVacia()){
+            if (this.raiz == null){ 
+                esFrontera = true; //Si arbol actual y unaLista son vacios
+            } else {
+                esFrontera = false; //Si unaLista esta vacia y el arbol actual no lo esta
+            }
+        } else {
+            Lista list = unaLista.clone(); //Clono lista para no modificar original
+            sonFronteraAux(this.raiz, list); //Llamado recursivo
+            esFrontera = list.esVacia(); //Si list se vacio, entonces todos sus elementos eran frontera
+        }
+        return esFrontera;
+    }
+    
+    private void sonFronteraAux(NodoGen nodo, Lista list) {
+        //Metodo que busca cada hoja y elimina de la lista list si es encontrada
+        if (nodo != null) {
+            NodoGen hijo = nodo.getHijoIzquierdo();
+            if (hijo == null) { //Si nodo es hoja (no tiene HI)
+                int pos = list.localizar(nodo.getElem()); //Buscar posición en la lista
+                if (pos > 0) {
+                    list.eliminar(pos); //Eliminarlo de la lista
+                }
+            } else {
+                //Paso recursivo con sus hijos, si son hojas, los busca en la lista y elimina
+                while (hijo != null && !list.esVacia()) { 
+                    sonFronteraAux(hijo, list);
+                    hijo = hijo.getHermanoDerecho();
+                }
+            }
+        }
+    }
+
+    public boolean equals(ArbolGen unArbol) { 
+        //Metodo que verifica si dos arboles son iguales
+        boolean iguales = equalsAux(this.raiz, unArbol.raiz);
+        return iguales;
+    }
+
+    private boolean equalsAux(NodoGen nodo1, NodoGen nodo2) {
+        /*Metodo auxiliar que verifica si los elementos de dos nodos son iguales,
+        si lo son, verifica sus hermanos e hijos recursivamente*/
+        boolean iguales;
+        if (nodo1 != null && nodo2 != null) { //Si ninguno es null, verifica si contienen el mismo elemento
+            iguales = nodo1.getElem().equals(nodo2.getElem());
+            if (iguales) { //Si son iguales sus elementos, verifica sus hermanos
+                iguales = equalsAux(nodo1.getHermanoDerecho(), nodo2.getHermanoDerecho());
+                if (iguales) { //Si son iguales los elementos de los hermanos, verifica sus hijos
+                    iguales = equalsAux(nodo1.getHijoIzquierdo(), nodo2.getHijoIzquierdo());
+                }
+            }
+        } else { //Si alguno de los dos es null, verifica que ambos lo sean
+            iguales = nodo1 == null && nodo2 == null;
+        }
+        return iguales;
+    }
+
+
 
 }

@@ -6,9 +6,17 @@ public class PruebaArbolGen {
     
     public static void main(String[] args) {
         ArbolGen a = new ArbolGen();
-        cargarArbol(a);
+        ArbolGen clon = new ArbolGen();
+        //cargarArbol(a);
+    
+        System.out.println("--- Arbol ---");
         System.out.println(a.toString());
-        System.out.println(a.listarPorNiveles().toString());    
+        
+        clon = a.clone();
+        System.out.println("--- Clon ---");
+        System.out.println(clon.toString());
+
+        System.out.println("--- Arbol y Clon"+((a.equals(clon))?" son iguales ---":" no son iguales ---"));
     }
 
     public static void cargarArbol(ArbolGen a) {
