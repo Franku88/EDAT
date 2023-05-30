@@ -3,6 +3,12 @@ package estructuras.jerarquicas.testing;
 import estructuras.jerarquicas.dinamicas.ArbolGen;
 import estructuras.lineales.dinamicas.Lista;
 
+/************* Autores ***********
+- Franco Fabian Benitez, Legajo FAI-3169
+* Jamiro Zuñiga, Legajo FAI-3429
+* Agustín Ezequiel Heredia, Legajo FAI-2876
+*/
+
 public class TestSonFrontera {
 
     public static final String sErr = "ERROR", sOk = "OK";
@@ -12,7 +18,7 @@ public class TestSonFrontera {
         Lista list = new Lista();
         
         System.out.println("****************************************************************");
-        System.out.println("*                   Test Metodo sonFrontera                    *");
+        System.out.println("*              Test Metodo sonFrontera y equals                *");
         System.out.println("****************************************************************");
         System.out.println("");
         
@@ -172,10 +178,6 @@ public class TestSonFrontera {
         System.out.println("\tClon: \n"+clon.toString());
         System.out.println("\tSe espera OK: "+((arbol.equals(clon)) ? sOk : sErr)); 
         System.out.println("****************************************************************");
-
-        
-
-
     }
 
     public static void llenarArbol(ArbolGen a){

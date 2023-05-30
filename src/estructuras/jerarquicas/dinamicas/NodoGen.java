@@ -1,5 +1,11 @@
 package estructuras.jerarquicas.dinamicas;
 
+/************* Autores ***********
+- Franco Fabian Benitez, Legajo FAI-3169
+* Jamiro Zuñiga, Legajo FAI-3429
+* Agustín Ezequiel Heredia, Legajo FAI-2876
+*/
+
 public class NodoGen {
     
     private Object elemento;

@@ -1,5 +1,9 @@
 package estructuras.jerarquicas.dinamicas;
 
+/************* Autores ***********
+- Franco Fabian Benitez, Legajo FAI-3169
+*/
+
 import estructuras.lineales.dinamicas.Lista;
 import estructuras.lineales.dinamicas.Cola;
 

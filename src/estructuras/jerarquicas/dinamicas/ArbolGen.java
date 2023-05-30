@@ -3,6 +3,12 @@ package estructuras.jerarquicas.dinamicas;
 import estructuras.lineales.dinamicas.Lista;
 import estructuras.lineales.dinamicas.Cola;
 
+/************* Autores ***********
+- Franco Fabian Benitez, Legajo FAI-3169
+* Jamiro Zuñiga, Legajo FAI-3429
+* Agustín Ezequiel Heredia, Legajo FAI-2876
+*/
+
 public class ArbolGen {
     
     private NodoGen raiz;

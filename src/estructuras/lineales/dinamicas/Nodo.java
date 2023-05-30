@@ -1,8 +1,9 @@
 package estructuras.lineales.dinamicas;
 
 /************* Autores ***********
-- Franco Benitez, Legajo FAI-3169
-- Jamiro Zuñiga, Legajo FAI-3429
+- Franco Fabian Benitez, Legajo FAI-3169
+* Jamiro Zuñiga, Legajo FAI-3429
+* Agustín Ezequiel Heredia, Legajo FAI-2876
 */
 
 public class Nodo {
