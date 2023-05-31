@@ -67,7 +67,7 @@ public class HeapMin {
         return exito;
     }
 
-    public void hacerBajar(int posPadre) {
+    private void hacerBajar(int posPadre) {
         //Metodo aux que hace bajar al padre hasta que sus hijos sean mayores al mismo
         boolean ordenado = false;
         Comparable aux = this.heap[posPadre];
@@ -97,6 +97,64 @@ public class HeapMin {
         }
     }
 
-    
+    public boolean esVacio() {
+        //Retorna verdadero si el arbol tiene al menos un elementos
+        return this.ultimo == 0;
+    }
 
+    public Comparable recuperarCima() {
+        //Retorna elemento que se encuentra en la raiz
+        Comparable elem;
+        if (!this.esVacio()) {
+            elem = this.heap[1];
+        } else {
+            elem = null;
+        }
+        return elem;
+    }
+
+    public HeapMin clone(){
+        //Retorna un clon del arbol heap actual
+        HeapMin clon = new HeapMin();
+        //Aisgno la posicion de su ultimo nodo
+        clon.ultimo = this.ultimo;
+        //Copio cada valor en el clon
+        for (int pos = 1; pos <= this.ultimo; pos++){
+            clon.heap[pos] = this.heap[pos];
+        }
+        return clon;
+    }
+
+    public String toString(){
+        //Retorna un string representando el contenido del arbol heap
+        String cad = "";
+        //Si el arbol no esta vacio
+        if (!this.esVacio()){
+            int izq, der;
+            //Recorro array completo, concatenando cada padre apuntando a sus HI y HD
+            for (int pos = 1; pos <= this.ultimo; pos++) {
+                //Concateno la raiz
+                cad = cad + "("+this.heap[pos].toString() + ") ->  ";
+                //pos del HI
+                izq = pos * 2; 
+                //pos del HD
+                der = (pos * 2) + 1;
+                //Si existe el hijo izq, lo concateno
+                if (izq <= this.ultimo){ 
+                    cad = cad + "HI: " + this.heap[izq].toString() + "    ";
+                } else {
+                    cad = cad + "HI: -    ";
+                }
+                //Si existe el hijo der, lo concateno
+                if (der <= this.ultimo){ 
+                    cad = cad + "HD: " + this.heap[der].toString() + "\n";
+                } else {
+                    cad = cad + "HD: -\n";
+                }
+            }
+        } else {
+            cad = "Arbol vacio";
+        }
+        return cad;
+    }
 }
