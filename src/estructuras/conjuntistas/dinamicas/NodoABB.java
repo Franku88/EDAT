@@ -2,21 +2,21 @@ package estructuras.conjuntistas.dinamicas;
 
 public class NodoABB {
  
-    private Object elemento;
+    private Comparable elemento;
     private NodoABB izquierdo;
     private NodoABB derecho;
 
-    public NodoABB(Object elem, NodoABB izq, NodoABB der) {
+    public NodoABB(Comparable elem, NodoABB izq, NodoABB der) {
         this.elemento = elem;
         this.izquierdo = izq;
         this.derecho = der;
     }
 
-    public Object getElemento() {
+    public Comparable getElemento() {
         return this.elemento;
     }
     
-    public void setElemento(Object elem) {
+    public void setElemento(Comparable elem) {
             this.elemento = elem;
     }
 
