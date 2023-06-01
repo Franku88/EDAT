@@ -31,10 +31,11 @@ public class HeapMin {
         //Metodo que acomoda un nodo de manera que el padre del mismo sea menor a el
         boolean ordenado = false;
         Comparable auxHijo = this.heap[posHijo];
+        int posPadre;
         //Mientras no este ordenado
         while (!ordenado) {
             //Calculo posicion del padre
-            int posPadre = (int)(posHijo/2);
+            posPadre = (int)(posHijo/2);
             //Si existe padre (hijo no es raiz)
             if (posPadre > 0) {
                 //Si hijo es menor al padre, se intercambian
@@ -116,7 +117,7 @@ public class HeapMin {
     public HeapMin clone(){
         //Retorna un clon del arbol heap actual
         HeapMin clon = new HeapMin();
-        //Aisgno la posicion de su ultimo nodo
+        //Asigno la posicion de su ultimo nodo
         clon.ultimo = this.ultimo;
         //Copio cada valor en el clon
         for (int pos = 1; pos <= this.ultimo; pos++){
