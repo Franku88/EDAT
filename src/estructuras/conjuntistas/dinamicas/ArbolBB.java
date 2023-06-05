@@ -55,7 +55,7 @@ public class ArbolBB {
 
     public boolean esVacio() {
         //Metodo que retorna verdadero si el arbol esta vacio
-        return this.raiz != null;
+        return this.raiz == null;
     }
 
     public void vaciar() {
