@@ -1,27 +1,27 @@
 package estructuras.conjuntistas.dinamicas;
-import estructuras.lineales.dinamicas.*;
+import estructuras.lineales.dinamicas.Lista;
 
-public class ArbolBB {
+public class ArbolAVL {
 
-    private NodoABB raiz;
+    private NodoAVL raiz;
 
-    public ArbolBB() {
+    public ArbolAVL() {
         this.raiz = null;
     }
 
-    public boolean insertar(Comparable elem) {
-        //Inserta un elemento en el Arbol manteniendo su respectivo orden
-        //Retorna verdadero si se pudo realizar la insercion
-        boolean exito = true;
-        if (!this.esVacio()) {
-            exito = insertarAux(this.raiz, elem);
+    public boolean insertar(Comparable elem){
+        //Inserta un elem conservando el orden de el arbol 
+        boolean exito;
+        if (!this.esVacio()){
+            exito = insertarAux(this.raiz, elem, null);
         } else {
-            this.raiz = new NodoABB(elem, null, null);
+            exito = true;
+            this.raiz = new NodoAVL(elem, null, null);
         }
         return exito;
     }
 
-    private boolean insertarAux(NodoABB nodo, Comparable elem) {
+    private boolean insertarAux(NodoAVL nodo, Comparable elem, NodoAVL padre){
         //Metodo auxiliar que busca la posicion del nuevo nodo y lo inserta si no se encuentra
         //Retorna verdadero si se pudo insertar, falso si el elemento ya se encuentra en el arbol
         boolean exito = true;
@@ -29,32 +29,43 @@ public class ArbolBB {
         int comparacion = elem.compareTo(nodo.getElemento());
         //Si el elemento se encuentra
         if (comparacion == 0) { 
-            exito = false; 
+            exito = false; //error el elem ya existe en el arbol    
         } else {
             //Si el elemento es menor al de nodo
-            if (comparacion < 0) {
-                NodoABB izq = nodo.getIzquierdo();
+            if (comparacion < 0) { 
+                NodoAVL izq = nodo.getIzquierdo();
                 //Inserto elemento si no tiene HI
-                if (izq == null){ 
-                    nodo.setIzquierdo(new NodoABB(elem, null, null));
+                if (izq == null) { 
+                    nodo.setIzquierdo(new NodoAVL(elem, null, null));
                 } else { //Si tiene HI, realizo invocacion con el mismo
-                    exito = insertarAux(izq, elem);
+                    exito = insertarAux(izq, elem, nodo);
                 }
             } else { //Si el elemento es mayor al del nodo
-                NodoABB der = nodo.getDerecho();
+                NodoAVL der = nodo.getDerecho();
                 //Inserto elemento si no tiene HD
                 if (der == null) { 
-                    nodo.setDerecho(new NodoABB(elem, null, null));
+                    nodo.setDerecho(new NodoAVL(elem, null, null));
                 } else { //Si tiene HD, realizo invocacion con el mismo
-                    exito = insertarAux(der, elem);
+                    exito = insertarAux(der, elem, nodo);
                 }
             }
         }
+        //Si se inserto, verifico balanceo
+        if (exito) {
+            //Recalculo altura 
+            nodo.recalcularAltura();
+            //Veo balance de nodo
+            int balance = balance(nodo);
+            //Si esta desbalanceado
+            if (balance < -1 || balance > 1) {
+                balancear(nodo, balance, padre);
+                nodo.recalcularAltura();
+            } 
+        }   
         return exito;
     }
-
+    
     public boolean esVacio() {
-        //Metodo que retorna verdadero si el arbol esta vacio
         return this.raiz == null;
     }
 
@@ -68,14 +79,14 @@ public class ArbolBB {
         return eliminarAux(this.raiz, null, elem);
     }
 
-    private boolean eliminarAux(NodoABB nodo, NodoABB padre, Comparable elem) {
+    private boolean eliminarAux(NodoAVL nodo, NodoAVL padre, Comparable elem) {
         //Metodo que elimina un elemento del arbol conservando el orden del mismo
         //Retorna verdadero si se elimina, falso si no se encuentra
         boolean exito = false;
         if (nodo != null) {
             //Hijos de nodo actual
-            NodoABB izq = nodo.getIzquierdo();
-            NodoABB der = nodo.getDerecho();
+            NodoAVL izq = nodo.getIzquierdo();
+            NodoAVL der = nodo.getDerecho();
             //Comparo elem a eliminar con elemento del nodo actual
             int comparacion = elem.compareTo(nodo.getElemento());
             //Casos
@@ -108,11 +119,23 @@ public class ArbolBB {
                     exito = eliminarAux(der, nodo, elem); 
                 }
             }
+            //Si se inserto, verifico balanceo
+            if (exito) {
+                //Recalculo altura 
+                nodo.recalcularAltura();
+                //Veo balance de nodo
+                int balance = balance(nodo);
+                //Si esta desbalanceado
+                if (balance < -1 || balance > 1) {
+                    balancear(nodo, balance, padre);
+                    nodo.recalcularAltura();
+                } 
+            } 
         }
         return exito;
     }
 
-    private void casoHoja(NodoABB nodo, NodoABB padre) {
+    private void casoHoja(NodoAVL nodo, NodoAVL padre) {
         //Caso del metodo eliminar, elimina un nodo que es hoja.
         //Si el arbol tiene un solo elemento
         if (padre == null) {
@@ -129,10 +152,10 @@ public class ArbolBB {
     }
 
     /****/
-    private void casoUnHijo(NodoABB nodo, NodoABB padre) {
+    private void casoUnHijo(NodoAVL nodo, NodoAVL padre) {
         //Caso del metodo eliminar, elimina nodo que tiene un solo hijo
-        NodoABB izq = nodo.getIzquierdo();
-        NodoABB der = nodo.getDerecho();
+        NodoAVL izq = nodo.getIzquierdo();
+        NodoAVL der = nodo.getDerecho();
         //Si padre de nodo no es nulo, es decir, nodo no es raiz
         if (padre != null) {
             boolean nodoEsMenor = (nodo.getElemento()).compareTo(padre.getElemento()) < 0;
@@ -169,10 +192,10 @@ public class ArbolBB {
         return menor;
     }
 
-    private Comparable menorEnSubarbol(NodoABB nodo) {
+    private Comparable menorEnSubarbol(NodoAVL nodo) {
         //Metodo que retorna el menor elemento de un subarbol
         Comparable menor; 
-        NodoABB izq = nodo.getIzquierdo();
+        NodoAVL izq = nodo.getIzquierdo();
         //Si no tiene nodo izquierdo, entonces ya es el menor
         if (izq == null) {
             menor = nodo.getElemento();
@@ -193,10 +216,10 @@ public class ArbolBB {
         return mayor;
     }
 
-    private Comparable mayorEnSubarbol(NodoABB nodo) {
+    private Comparable mayorEnSubarbol(NodoAVL nodo) {
         //Metodo que retorna el mayor elemento de un subarbol
         Comparable mayor;
-        NodoABB der = nodo.getDerecho();
+        NodoAVL der = nodo.getDerecho();
         //Si no tiene nodo derecho, entonces ya es el mayor
         if (der == null) {
             mayor = nodo.getElemento();
@@ -206,12 +229,123 @@ public class ArbolBB {
         return mayor;
     }
 
+    private int balance(NodoAVL nodo){
+        //Modulo que calcula el balance de un nodoAVL
+        int izq , der;
+
+        if (nodo.getIzquierdo() != null) {
+            izq = nodo.getIzquierdo().getAltura();
+        } else { //Altura de null es -1
+            izq = -1;
+        }
+
+        if (nodo.getDerecho() != null) {
+            der = nodo.getDerecho().getAltura();
+        } else { //Altura de null es -1
+            der = -1;
+        }
+        return (izq - der); 
+    }
+
+    /***/
+    private void balancear(NodoAVL nodo, int balance, NodoAVL padre) {
+        /*Metodo aux que balancea el nodo con 4 casos
+        balance: variable con el balance de nodo
+        padre: es el padre de nodo, usado para asignar a su hijo desbalanceado una vez termine el proceso
+        precondicion: nodo no es vacio y balance es 2 o -2*/
+        NodoAVL aux;
+        //Si esta torcido a derecha
+        if (balance < -1) { 
+
+            int balanceHD = balance(nodo.getDerecho());
+            if (balanceHD <= 0) { //si el HD esta torcido a la der
+                nodo = rotarIzquierda(nodo); //lo tuerzo a la izq
+
+                if (padre == null) { //caso especial el nodo a balancear es raiz
+                    this.raiz = nodo;
+                } else {
+                    //seteo uno de los hijos de padre
+                    if (nodo.getElemento().compareTo(padre.getElemento()) > 0) {
+                        padre.setDerecho(nodo);
+                    } else {
+                        padre.setIzquierdo(nodo);
+                    }
+                    padre.recalcularAltura();
+                }
+                
+            } else { //el HD esta torcido a la izq
+                aux = rotarDerecha(nodo.getDerecho()); //lo tuerzo al mismo lado q el padre
+                nodo.setDerecho(aux);
+
+                balancear(nodo, balance, padre); //reutilizo el metodo para balancear al padre(n)
+            }
+
+        } else { //Si esta torcido a izq
+
+            int balanceHI = balance(nodo.getIzquierdo());
+            if (balanceHI >= 0) { //Si HI esta torcido a la izq
+
+                nodo = rotarDerecha(nodo);
+                if (padre == null) {
+                    this.raiz = nodo;
+                } else {
+                    //seteo uno de los hijos de padre
+                    if (nodo.getElemento().compareTo(padre.getElemento()) > 0){
+                        padre.setDerecho(nodo);
+                    } else {
+                        padre.setIzquierdo(nodo);
+                    }
+                    padre.recalcularAltura();
+                }
+                
+            } else { //Si HI esta torcido a la der
+                aux = rotarIzquierda(nodo.getIzquierdo()); //lo tuerzo al mismo lado q el padre
+                nodo.setIzquierdo(aux); 
+
+                balancear(nodo, balance, padre); //reutilizo el metodo para balancear al padre(nodo)
+            }
+            
+        }
+    }
+
+    public NodoAVL rotarIzquierda(NodoAVL pivote){
+        //Guardo hijo derecho del pivote
+        NodoAVL hD = pivote.getDerecho();
+        //Guardo hijo izquierdo del hijo derecho
+        NodoAVL temp = hD.getIzquierdo();
+        //Establezco pivote como hijo izquierdo de su hijo derecho
+        hD.setIzquierdo(pivote);
+        //Establezco hijo izquierdo del hijo derecho como hijo derecho del pivote
+        pivote.setDerecho(temp);
+        //Reestablezco alturas de pivote y hD
+        pivote.recalcularAltura();
+        hD.recalcularAltura();
+        //Retorna nueva raiz de subarbol
+        return hD;
+    }
+
+    public NodoAVL rotarDerecha(NodoAVL pivote){
+        //Guardo hijo izquierdo del pivote
+        NodoAVL hI = pivote.getIzquierdo();
+        //Guardo hijo derecho del hijo izquierdo
+        NodoAVL temp = hI.getDerecho();
+        //Establezco pivote como hijo derecho de su hijo izquierdo
+        hI.setDerecho(pivote);
+        //Establezco hijo derecho del hijo izquierdo como hijo izquierdo del pivote
+        pivote.setIzquierdo(temp);
+        //Reestablezco alturas de pivote y hI
+        pivote.recalcularAltura();
+        hI.recalcularAltura();
+        //Retorna nueva raiz de subarbol
+        return hI;
+    }
+
     public boolean pertenece(Comparable elem){
         //Retorna verdadero si elem se encuentra en el arbol
         return perteneceAux(this.raiz, elem);
     }
 
-    private boolean perteneceAux(NodoABB nodo, Comparable elem){
+    private boolean perteneceAux(NodoAVL nodo, Comparable elem){
         //Metodo auxiliar que verifica si un elemento esta en el arbol
         boolean encontrado;
         //Si nodo no es nulo
@@ -241,7 +375,7 @@ public class ArbolBB {
         return list;
     }
 
-    private void listarAux(NodoABB nodo, Lista list){
+    private void listarAux(NodoAVL nodo, Lista list){
         //Lista elementos del arbol de menor a mayor, realizando recorrido inorden inverso
         if (nodo != null) { 
             listarAux(nodo.getDerecho(), list);
@@ -257,7 +391,7 @@ public class ArbolBB {
         return list;
     }
 
-    private void listarRangoAux(NodoABB nodo, Comparable min, Comparable max, Lista list){
+    private void listarRangoAux(NodoAVL nodo, Comparable min, Comparable max, Lista list){
         //Inserta los elementos => min y <= max. Realizo insercion con recorrido inorden inverso (der, raiz, izq)
         //Si nodo no es nulo
         if (nodo != null) {
@@ -292,14 +426,14 @@ public class ArbolBB {
         return cad;
     }
 
-    private String toStringAux(NodoABB nodo){
+    private String toStringAux(NodoAVL nodo){
         //Metodo auxiliar que concatena los elementos del arbol en un string
         String cad = "";
         //Si el nodo no es nulo
         if (nodo != null) {
             //Obtengo hijos de nodo
-            NodoABB izq = nodo.getIzquierdo(); 
-            NodoABB der = nodo.getDerecho();
+            NodoAVL izq = nodo.getIzquierdo(); 
+            NodoAVL der = nodo.getDerecho();
             //Concateno elemento del nodo
             cad = cad +"("+ nodo.getElemento() + ") ->  ";
             //Si tiene HI, lo concateno
@@ -321,21 +455,21 @@ public class ArbolBB {
         return cad;
     }
 
-    public ArbolBB clone() {
+    public ArbolAVL clone() {
         //Retorna un clon del arbol actual
-        ArbolBB clon = new ArbolBB();
+        ArbolAVL clon = new ArbolAVL();
         clon.raiz = cloneAux(this.raiz);
         return clon;
     }
 
-    private NodoABB cloneAux(NodoABB nodo) {
+    private NodoAVL cloneAux(NodoAVL nodo) {
         //Metodo auxiliar que copia nodos de un arbol
-        NodoABB copia = null;
+        NodoAVL copia = null;
         //Si nodo no es nulo
         if (nodo != null) {
             /*Creo un nuevo nodo con el mismo elemento de nodo y enlazado recursivamente
             a los clones de HI e HD del nodo original*/
-            copia = new NodoABB(nodo.getElemento(), cloneAux(nodo.getIzquierdo()), cloneAux(nodo.getDerecho()));
+            copia = new NodoAVL(nodo.getElemento(), cloneAux(nodo.getIzquierdo()), cloneAux(nodo.getDerecho()));
         }
         return copia;
     }

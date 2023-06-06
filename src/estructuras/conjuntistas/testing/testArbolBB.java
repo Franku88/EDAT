@@ -13,10 +13,9 @@ public class testArbolBB {
         System.out.println("Elem min "+a.minimoElem());
         System.out.println("Elem max "+a.maximoElem());
         System.out.println("Lista menor a mayor "+a.listar().toString());
-        System.out.println("Lista rango [2, 8]: "+a.listarRango(2, 8).toString());
+        System.out.println("Lista rango [5, 16]: "+a.listarRango(5, 16).toString());
         a.eliminar(10);
         System.out.println(a.toString());
-
     }
 
     public static void llenarArbol(ArbolBB a){
