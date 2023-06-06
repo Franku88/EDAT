@@ -254,57 +254,62 @@ public class ArbolAVL {
         padre: es el padre de nodo, usado para asignar a su hijo desbalanceado una vez termine el proceso
         precondicion: nodo no es vacio y balance es 2 o -2*/
         NodoAVL aux;
-        //Si esta torcido a derecha
+        //Si subarbol con raiz nodo esta torcido a derecha
         if (balance < -1) { 
-
+            //Obtengo balance de HD
             int balanceHD = balance(nodo.getDerecho());
-            if (balanceHD <= 0) { //si el HD esta torcido a la der
-                nodo = rotarIzquierda(nodo); //lo tuerzo a la izq
-
-                if (padre == null) { //caso especial el nodo a balancear es raiz
+            //Si HD esta torcido a la der
+            if (balanceHD <= 0) {
+                //Roto HD a la izq, contrario al lado del padre
+                nodo = rotarIzquierda(nodo);
+                //Caso especial, nodo a balancear es raiz
+                if (padre == null) {
                     this.raiz = nodo;
                 } else {
-                    //seteo uno de los hijos de padre
-                    if (nodo.getElemento().compareTo(padre.getElemento()) > 0) {
+                    //Comparo nodo con su padre
+                    int comparacion = (nodo.getElemento()).compareTo(padre.getElemento());
+                    //Si nodo es mayor a padre
+                    if (comparacion > 0) {
                         padre.setDerecho(nodo);
-                    } else {
+                    } else { //Si nodo es menor a padre
                         padre.setIzquierdo(nodo);
                     }
                     padre.recalcularAltura();
                 }
-                
-            } else { //el HD esta torcido a la izq
-                aux = rotarDerecha(nodo.getDerecho()); //lo tuerzo al mismo lado q el padre
+            } else { //Si HD esta torcido a la izq
+                //Roto HD al mismo lado que el padre
+                aux = rotarDerecha(nodo.getDerecho()); 
                 nodo.setDerecho(aux);
-
-                balancear(nodo, balance, padre); //reutilizo el metodo para balancear al padre(n)
+                //Balanceo a padre
+                balancear(nodo, balance, padre);
             }
-
-        } else { //Si esta torcido a izq
-
+        } else { //Si subarbol con raiz nodo esta torcido a izq
+            //Obtengo balance de HI
             int balanceHI = balance(nodo.getIzquierdo());
-            if (balanceHI >= 0) { //Si HI esta torcido a la izq
-
+            //Si HI esta torcido a la izq
+            if (balanceHI >= 0) {
+                //Roto HI a la der, contrario al lado del padre
                 nodo = rotarDerecha(nodo);
                 if (padre == null) {
                     this.raiz = nodo;
                 } else {
-                    //seteo uno de los hijos de padre
-                    if (nodo.getElemento().compareTo(padre.getElemento()) > 0){
+                    //Comparo nodo con su padre
+                    int comparacion = nodo.getElemento().compareTo(padre.getElemento());
+                    //Si nodo es mayor a padre
+                    if (comparacion > 0){
                         padre.setDerecho(nodo);
-                    } else {
+                    } else { //Si nodo es menor a padre
                         padre.setIzquierdo(nodo);
                     }
                     padre.recalcularAltura();
                 }
-                
             } else { //Si HI esta torcido a la der
-                aux = rotarIzquierda(nodo.getIzquierdo()); //lo tuerzo al mismo lado q el padre
-                nodo.setIzquierdo(aux); 
-
-                balancear(nodo, balance, padre); //reutilizo el metodo para balancear al padre(nodo)
+                //Roto HI al mismo lado que el padre
+                aux = rotarIzquierda(nodo.getIzquierdo());
+                nodo.setIzquierdo(aux);
+                //Balanceo a padre
+                balancear(nodo, balance, padre);
             }
-            
         }
     }
 
