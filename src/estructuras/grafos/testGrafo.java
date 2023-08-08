@@ -31,9 +31,6 @@ public class testGrafo {
 
 
         System.out.println("Grafo: \n "+grafo.toString());
-        /*grafo.eliminarVertice("Neuquen");
-        System.out.println("---------------------------------------");
-        System.out.println("Grafo modif: \n"+grafo.toString());*/
         System.out.println("Lista en profundidad: "+grafo.listarEnProfundidad().toString());
         System.out.println("Lista en anchura: "+grafo.listarEnAnchura().toString());
         System.out.println("Existe camino "+grafo.existeCamino("F", "G"));
