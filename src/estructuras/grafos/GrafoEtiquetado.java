@@ -427,4 +427,6 @@ public class GrafoEtiquetado {
         return ret;
     }
 
+    /*Clone */
+
 }
