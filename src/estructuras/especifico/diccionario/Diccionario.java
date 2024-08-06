@@ -10,7 +10,7 @@ public class Diccionario {
     }
 
     public boolean insertar(Comparable clave, Object dato) {
-        //Inserta un elem conservando el orden de el arbol 
+        //Inserta un elem con clave y dato, conservando el orden de el arbol 
         boolean exito = true;
         if (this.esVacio()) {
             this.raiz = new NodoAVLDicc(clave, dato, null, null);
@@ -28,25 +28,24 @@ public class Diccionario {
         int comparacion = clave.compareTo(nodo.getClave()); //Comparo clave a insertar con clave del nodo actual
         if (comparacion == 0) { //Si la clave se encuentra
             exito = false; //error la clave ya existe en el arbol    
-        } else {
-            
+        } else {            
             if (comparacion < 0) { //Si la clave es menor al de nodo
                 NodoAVLDicc izq = nodo.getIzquierdo();
-                if (izq == null) { //Inserto clave si no tiene HI
+                if (izq == null) { //Lo inserto si no tiene HI
                     nodo.setIzquierdo(new NodoAVLDicc(clave, dato, null, null));
                 } else { //Si tiene HI, realizo invocacion con el mismo
                     exito = insertarAux(izq, clave, dato, nodo);
                 }
             } else { //Si la clave es mayor al del nodo
                 NodoAVLDicc der = nodo.getDerecho();
-                if (der == null) { //Inserto clave si no tiene HD
+                if (der == null) { //Lo inserto si no tiene HD
                     nodo.setDerecho(new NodoAVLDicc(clave, dato, null, null));
                 } else { //Si tiene HD, realizo invocacion con el mismo
                     exito = insertarAux(der, clave, dato, nodo);
                 }
             }
         }        
-        if (exito) { //Si se inserto, verifico balanceo
+        if (exito) { //Si se inserto en alguna invocacion, verifico balanceo
             nodo.recalcularAltura(); //Recalculo altura 
             int balance = balance(nodo); //Veo balance de nodo
             if (balance < -1 || balance > 1) { //Si esta desbalanceado
@@ -70,13 +69,11 @@ public class Diccionario {
     private int balance(NodoAVLDicc nodo){
         //Modulo que calcula el balance de un nodoAVL
         int izq , der;
-
         if (nodo.getIzquierdo() != null) {
             izq = nodo.getIzquierdo().getAltura();
         } else { //Altura de null es -1
             izq = -1;
         }
-
         if (nodo.getDerecho() != null) {
             der = nodo.getDerecho().getAltura();
         } else { //Altura de null es -1
@@ -92,22 +89,16 @@ public class Diccionario {
         padre: es el padre de nodo, usado para asignar a su hijo desbalanceado una vez termine el proceso
         precondicion: nodo no es vacio y balance es 2 o -2*/
         NodoAVLDicc aux;
-        //Si subarbol con raiz nodo esta torcido a derecha
-        if (balance < -1) { 
-            //Obtengo balance de HD
-            int balanceHD = balance(nodo.getDerecho());
-            //Si HD esta torcido a la der
-            if (balanceHD <= 0) {
-                //Roto HD a la izq, contrario al lado del padre
-                nodo = rotarIzquierda(nodo);
-                //Caso especial, nodo a balancear es raiz
-                if (padre == null) {
+        if (balance < -1) { //Si subarbol con raiz nodo esta torcido a derecha
+            int balanceHD = balance(nodo.getDerecho()); //Obtengo balance de HD
+            if (balanceHD <= 0) { //Si HD esta torcido a la der
+                nodo = rotarIzquierda(nodo); //Roto HD a la izq, contrario al lado del padre
+                if (padre == null) { //Caso especial, nodo a balancear es raiz
                     this.raiz = nodo;
                 } else {
                     //Comparo nodo con su padre
                     int comparacion = (nodo.getClave()).compareTo(padre.getClave());
-                    //Si nodo es mayor a padre
-                    if (comparacion > 0) {
+                    if (comparacion > 0) { //Si nodo es mayor a padre
                         padre.setDerecho(nodo);
                     } else { //Si nodo es menor a padre
                         padre.setIzquierdo(nodo);
@@ -115,26 +106,20 @@ public class Diccionario {
                     padre.recalcularAltura();
                 }
             } else { //Si HD esta torcido a la izq
-                //Roto HD al mismo lado que el padre
-                aux = rotarDerecha(nodo.getDerecho()); 
+                aux = rotarDerecha(nodo.getDerecho()); //Roto HD al mismo lado que el padre
                 nodo.setDerecho(aux);
-                //Balanceo a padre
-                balancear(nodo, balance, padre);
+                balancear(nodo, balance, padre); //Balanceo a padre
             }
         } else { //Si subarbol con raiz nodo esta torcido a izq
-            //Obtengo balance de HI
-            int balanceHI = balance(nodo.getIzquierdo());
-            //Si HI esta torcido a la izq
-            if (balanceHI >= 0) {
-                //Roto HI a la der, contrario al lado del padre
-                nodo = rotarDerecha(nodo);
-                if (padre == null) {
+            int balanceHI = balance(nodo.getIzquierdo()); //Obtengo balance de HI
+            if (balanceHI >= 0) { //Si HI esta torcido a la izq
+                nodo = rotarDerecha(nodo); //Roto HI a la der, contrario al lado del padre
+                if (padre == null) { //Caso especial, nodo a balancear es raiz
                     this.raiz = nodo;
                 } else {
                     //Comparo nodo con su padre
                     int comparacion = nodo.getClave().compareTo(padre.getClave());
-                    //Si nodo es mayor a padre
-                    if (comparacion > 0){
+                    if (comparacion > 0) { //Si nodo es mayor a padre
                         padre.setDerecho(nodo);
                     } else { //Si nodo es menor a padre
                         padre.setIzquierdo(nodo);
@@ -142,11 +127,9 @@ public class Diccionario {
                     padre.recalcularAltura();
                 }
             } else { //Si HI esta torcido a la der
-                //Roto HI al mismo lado que el padre
-                aux = rotarIzquierda(nodo.getIzquierdo());
+                aux = rotarIzquierda(nodo.getIzquierdo()); //Roto HI al mismo lado que el padre
                 nodo.setIzquierdo(aux);
-                //Balanceo a padre
-                balancear(nodo, balance, padre);
+                balancear(nodo, balance, padre); //Balanceo a padre
             }
         }
     }
