@@ -48,9 +48,9 @@ public class testArbolAVL {
         tree.vaciar();
 
         System.out.println("<-- Eliminar nodo con 2 hijos -->");
-        llenarArbol(tree, new int[] {15, 9, 20, 6, 14, 17, 35, 3});
+        llenarArbol(tree, new int[] {14, 15, 9, 20, 6, 12, 17, 35, 3});
         System.out.println("Original: \n"+tree.toString());
-        tree.eliminar(15);
+        tree.eliminar(14);
         System.out.println(tree.toString());
     }
 

@@ -93,10 +93,8 @@ public class ArbolAVL {
             //Casos
             if (comparacion == 0) { //Si se encontró el nodo que contiene elem
                 exito = true;
-                if (izq != null && der != null) {  //Si el elem a eliminar tiene dos hijos
-                    Comparable menorElem = menorEnSubarbol(der); //Busco al elemento menor del subarbol derecho
-                    eliminarAux(der, nodo, menorElem); //Elimino elemento encontrado
-                    nodo.setElemento(menorElem); //Reemplazo en nodo de elemento eliminado por el menor encontrado
+                if (izq != null && der != null) { //Si el elem a eliminar tiene dos hijos
+                    casoDosHijos(nodo, padre);
                 } else { 
                     if (izq == null && der == null) { //Si el elem a eliminar es hoja
                         casoHoja(nodo, padre);
@@ -125,15 +123,15 @@ public class ArbolAVL {
 
     private void casoHoja(NodoAVL nodo, NodoAVL padre) {
         //Caso del metodo eliminar, elimina un nodo que es hoja.
-        if (padre == null) { //Si el arbol tiene un solo elemento
-            this.raiz = null;
-        } else {
+        if (padre != null) { 
             //Si el elemento de nodo es menor al de su padre, elimino HI de padre
             if ((nodo.getElemento()).compareTo(padre.getElemento()) < 0) {
                 padre.setIzquierdo(null);
             } else { //Si elemento es mayor al de su padre, elimino HD de padre
                 padre.setDerecho(null);
             }
+        } else { //Si nodo es raiz
+            this.raiz = null;
         }
     }
 
@@ -141,9 +139,8 @@ public class ArbolAVL {
         //Caso del metodo eliminar, elimina nodo que tiene un solo hijo
         NodoAVL izq = nodo.getIzquierdo();
         NodoAVL der = nodo.getDerecho();
-        //Si padre de nodo no es nulo, es decir, nodo no es raiz
-        if (padre != null) {
-                boolean nodoEsMenor = (nodo.getElemento()).compareTo(padre.getElemento()) < 0;
+        if (padre != null) { //Si nodo no es raiz
+            boolean nodoEsMenor = (nodo.getElemento()).compareTo(padre.getElemento()) < 0;
             if (der == null) { //Si solo tiene HI
                 if (nodoEsMenor) { //Si elemNodo es menor al de su padre, coloco izq como HI
                     padre.setIzquierdo(izq);
@@ -166,26 +163,37 @@ public class ArbolAVL {
         }
     }
 
+    private void casoDosHijos(NodoAVL nodo, NodoAVL padre) {
+        //Caso del metodo eliminar, elimina nodo que tiene ambos hijos 
+        //Elijo buscar nodo con elemento menor del subarbol derecho
+        NodoAVL subarbol = nodo.getDerecho();
+        NodoAVL candidato = menorEnSubarbol(subarbol);
+        /*Otra opcion: buscar el mayor del subarbol izquierdo
+        NodoAVL subarbol = nodo.getIzquierdo();
+        NodoAVL candidato = mayorEnSubarbol(subarbol);*/
+        eliminarAux(subarbol, nodo, candidato.getElemento()); //Elimino candidato encontrado
+        if (padre != null) { //Si nodo no es raiz
+            boolean nodoEsMenor = (candidato.getElemento()).compareTo(padre.getElemento()) < 0;
+            if (nodoEsMenor) {
+                padre.setIzquierdo(candidato); //Si candidato es menor a padre
+            } else {
+                padre.setDerecho(candidato); //Si candidato es mayor a padre
+            }         
+        } else { //Si nodo es raiz
+            this.raiz = candidato; //Convierto candidato encontrado en raiz
+        }
+        //Establezco hijos del candidato
+        candidato.setIzquierdo(nodo.getIzquierdo());
+        candidato.setDerecho(nodo.getDerecho());
+    }
+
     public Comparable minimoElem(){
         //Metodo que retorna el elemento mas chico del arbol
         Comparable menor;
         if (!this.esVacio()) {
-            menor = menorEnSubarbol(this.raiz);
+            menor = menorEnSubarbol(this.raiz).getElemento();
         } else {
             menor = null;
-        }
-        return menor;
-    }
-
-    private Comparable menorEnSubarbol(NodoAVL nodo) {
-        //Metodo que retorna el menor elemento de un subarbol
-        Comparable menor; 
-        NodoAVL izq = nodo.getIzquierdo();
-        //Si no tiene nodo izquierdo, entonces ya es el menor
-        if (izq == null) {
-            menor = nodo.getElemento();
-        } else { //Si tiene nodo izquierdo, sigo buscando
-            menor = menorEnSubarbol(izq);
         }
         return menor;
     }
@@ -194,24 +202,29 @@ public class ArbolAVL {
         //Metodo que retorna el elemento mas grande del arbol
         Comparable mayor;
         if (!this.esVacio()) {
-            mayor = mayorEnSubarbol(this.raiz);
+            mayor = mayorEnSubarbol(this.raiz).getElemento();
         } else {
             mayor = null;
         }
         return mayor;
     }
 
-    private Comparable mayorEnSubarbol(NodoAVL nodo) {
-        //Metodo que retorna el mayor elemento de un subarbol
-        Comparable mayor;
+    private NodoAVL menorEnSubarbol(NodoAVL nodo) {
+        //Metodo que retorna referencia al Nodo con menor elemento de un subarbol
+        NodoAVL izq = nodo.getIzquierdo();
+        if (izq != null) { //Si tiene nodo izquierdo, sigo buscando
+            nodo = menorEnSubarbol(izq);
+        } //Si no tiene nodo izquierdo, entonces ya es el menor
+        return nodo;
+    }
+
+    private NodoAVL mayorEnSubarbol(NodoAVL nodo) {
+        //Metodo que retorna referencia al Nodo con mayor elemento de un subarbol
         NodoAVL der = nodo.getDerecho();
-        //Si no tiene nodo derecho, entonces ya es el mayor
-        if (der == null) {
-            mayor = nodo.getElemento();
-        } else { //Si tiene nodo derecho, sigo buscando
-            mayor = mayorEnSubarbol(der);
-        }
-        return mayor;
+        if (der != null) { //Si tiene nodo derecho, sigo buscando
+            nodo = mayorEnSubarbol(der);
+        } //Si no tiene nodo derecho, entonces ya es el mayor
+        return nodo;
     }
 
     private void balancear(NodoAVL nodo, NodoAVL padre) {
@@ -351,7 +364,7 @@ public class ArbolAVL {
             Comparable elemNodo = nodo.getElemento(); 
             //Comparaciones de elemNodo con los extremos min y max
             int comparacionMin = elemNodo.compareTo(min);
-            int comparacionMax = elemNodo.compareTo(max) ;
+            int comparacionMax = elemNodo.compareTo(max);
             //Si elemNodo < max, recorro subArbol derecho
             if (comparacionMax < 0){
                 listarRangoAux(nodo.getDerecho(), min, max, list); 
