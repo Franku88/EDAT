@@ -27,7 +27,7 @@ public class NodoAVLDicc {
 
 
     public Comparable getClave() {
-        return clave;
+        return this.clave;
     }
 
     /*public void setClave(Comparable clave) {
@@ -43,7 +43,7 @@ public class NodoAVLDicc {
     }
 
     public NodoAVLDicc getIzquierdo(){
-        return izquierdo;
+        return this.izquierdo;
     }
     
     public void setIzquierdo(NodoAVLDicc izquierdo){
@@ -51,7 +51,7 @@ public class NodoAVLDicc {
     }
 
     public NodoAVLDicc getDerecho(){
-        return derecho;
+        return this.derecho;
     }
 
     public void setDerecho(NodoAVLDicc derecho){
@@ -59,16 +59,30 @@ public class NodoAVLDicc {
     }    
 
     public int getAltura(){
-        return altura;
+        return this.altura;
     }
 
     public void setAltura(int altura) {
         this.altura = altura;
     }
 
+    public int balance() {
+        //Modulo que calcula el balance de un nodoAVLDicc
+        int altIzq = -1; //Altura de null es -1
+        int altDer = -1;
+        if (this.izquierdo != null) {
+            altIzq = this.izquierdo.getAltura();
+        }
+        if (this.derecho != null) {
+            altDer = this.derecho.getAltura();
+        }
+        return (altIzq - altDer); 
+    }
+
     public void recalcularAltura() {
         //Realiza el calculo de la altura de un nodo en base a la altura de sus hijos
-        int altIzq = -1, altDer = -1;
+        int altIzq = -1; //Altura de null es -1
+        int altDer = -1;
         if (this.izquierdo != null) { //Si tiene HI calculo su altura
             altIzq = (this.izquierdo).altura;
         }

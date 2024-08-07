@@ -27,7 +27,7 @@ public class NodoAVL {
     }
     
     public void setElemento(Comparable elem) {
-            this.elemento = elem;
+        this.elemento = elem;
     }
 
     public NodoAVL getIzquierdo() {
@@ -47,7 +47,7 @@ public class NodoAVL {
     }
 
     public int getAltura() {
-        return altura;
+        return this.altura;
     }
 
     public void setAltura(int altura) {
@@ -56,8 +56,8 @@ public class NodoAVL {
     
     public int balance() {
         //Modulo que calcula el balance de un nodoAVL
-        int altIzq = -1;
-        int altDer = -1; //Altura de null es -1
+        int altIzq = -1; //Altura de null es -1
+        int altDer = -1; 
         if (this.izquierdo != null) {
             altIzq = this.izquierdo.getAltura();
         }
@@ -69,8 +69,8 @@ public class NodoAVL {
 
     public void recalcularAltura(){
         //Realiza el calculo de la altura de un nodo en base a la altura de sus hijos
-        int altIzq = -1;
-        int altDer = -1;
+        int altIzq = -1; //Altura de null es -1
+        int altDer = -1; 
         //Si tiene HI calculo su altura
         if (this.izquierdo != null) { 
             altIzq = (this.izquierdo).altura;

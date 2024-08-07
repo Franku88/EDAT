@@ -1,5 +1,5 @@
 package estructuras.conjuntistas.dinamicas;
-import estructuras.lineales.dinamicas.Lista;
+import estructuras.lineales.dinamicas.Lista; //Usado en métodos de listado
 @SuppressWarnings("rawtypes")
 
 public class ArbolAVL {
@@ -12,12 +12,11 @@ public class ArbolAVL {
 
     public boolean insertar(Comparable elem){
         //Inserta un elem conservando el orden de el arbol 
-        boolean exito;
-        if (!this.esVacio()){
-            exito = insertarAux(this.raiz, elem, null);
+        boolean exito = true;
+        if (this.esVacio()){
+            this.raiz = new NodoAVL(elem);
         } else {
-            exito = true;
-            this.raiz = new NodoAVL(elem, null, null);
+            exito = insertarAux(this.raiz, elem, null);
         }
         return exito;
     }
@@ -25,40 +24,33 @@ public class ArbolAVL {
     private boolean insertarAux(NodoAVL nodo, Comparable elem, NodoAVL padre){
         //Metodo auxiliar que busca la posicion del nuevo nodo y lo inserta si no se encuentra
         //Retorna verdadero si se pudo insertar, falso si el elemento ya se encuentra en el arbol
+        //padre: variable para balancear a nodo si fuera necesario
         boolean exito = true;
         //Comparo elemento a insertar con elemento del nodo actual
         int comparacion = elem.compareTo(nodo.getElemento());
-        //Si el elemento se encuentra
-        if (comparacion == 0) { 
+        if (comparacion == 0) { //Si el elemento se encuentra
             exito = false; //error el elem ya existe en el arbol    
         } else {
-            //Si el elemento es menor al de nodo
-            if (comparacion < 0) { 
-                NodoAVL izq = nodo.getIzquierdo();
+            if (comparacion < 0) { //Si el elemento es menor al de nodo
                 //Inserto elemento si no tiene HI
-                if (izq == null) { 
+                if (nodo.getIzquierdo() == null) { 
                     nodo.setIzquierdo(new NodoAVL(elem, null, null));
                 } else { //Si tiene HI, realizo invocacion con el mismo
-                    exito = insertarAux(izq, elem, nodo);
+                    exito = insertarAux(nodo.getIzquierdo(), elem, nodo);
                 }
             } else { //Si el elemento es mayor al del nodo
-                NodoAVL der = nodo.getDerecho();
                 //Inserto elemento si no tiene HD
-                if (der == null) { 
+                if (nodo.getDerecho() == null) { 
                     nodo.setDerecho(new NodoAVL(elem, null, null));
                 } else { //Si tiene HD, realizo invocacion con el mismo
-                    exito = insertarAux(der, elem, nodo);
+                    exito = insertarAux(nodo.getDerecho(), elem, nodo);
                 }
             }
         }
-        //Si se inserto, verifico balanceo
-        if (exito) {
-            //Recalculo altura 
-            nodo.recalcularAltura();
-            //Obtengo balance de nodo
-            int balance = nodo.balance();
-            //Si esta desbalanceado
-            if (balance < -1 || balance > 1) {
+        if (exito) { //Si se inserto en alguna invocacion, verifico balanceo
+            nodo.recalcularAltura(); //Recalculo altura 
+            int balance = nodo.balance(); //Obtengo balance de nodo
+            if (balance < -1 || balance > 1) { //Si esta desbalanceado
                 balancear(nodo, padre);
                 nodo.recalcularAltura();
             } 
