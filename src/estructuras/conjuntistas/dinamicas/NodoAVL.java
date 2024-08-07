@@ -1,4 +1,5 @@
 package estructuras.conjuntistas.dinamicas;
+@SuppressWarnings("rawtypes")
 
 public class NodoAVL {
     
@@ -53,6 +54,19 @@ public class NodoAVL {
         this.altura = altura;
     }
     
+    public int balance() {
+        //Modulo que calcula el balance de un nodoAVL
+        int altIzq = -1;
+        int altDer = -1; //Altura de null es -1
+        if (this.izquierdo != null) {
+            altIzq = this.izquierdo.getAltura();
+        }
+        if (this.derecho != null) {
+            altDer = this.derecho.getAltura();
+        }
+        return (altIzq - altDer); 
+    }
+
     public void recalcularAltura(){
         //Realiza el calculo de la altura de un nodo en base a la altura de sus hijos
         int altIzq = -1;

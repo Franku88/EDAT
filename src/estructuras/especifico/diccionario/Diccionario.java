@@ -1,6 +1,5 @@
 package estructuras.especifico.diccionario;
-
-import estructuras.conjuntistas.dinamicas.NodoAVL;
+@SuppressWarnings("rawtypes")
 
 public class Diccionario {
     private NodoAVLDicc raiz;
@@ -65,6 +64,117 @@ public class Diccionario {
         //Metodo que vacia el arbol actual
         this.raiz = null;
     }
+
+    ///////////////////////////////////////
+    public boolean eliminar(Comparable elem) {
+        //Metodo que remueve el elemento ingresado por parametro del arbol actual 
+        return eliminarAux(this.raiz, null, elem);
+    }
+
+    private boolean eliminarAux(NodoAVL nodo, NodoAVL padre, Comparable elem) {
+        //Metodo que elimina un elemento del arbol conservando el orden del mismo
+        //Retorna verdadero si se elimina, falso si no se encuentra
+        boolean exito = false;
+        if (nodo != null) {
+            //Hijos de nodo actual
+            NodoAVL izq = nodo.getIzquierdo();
+            NodoAVL der = nodo.getDerecho();
+            //Comparo elem a eliminar con elemento del nodo actual
+            int comparacion = elem.compareTo(nodo.getElemento());
+            //Casos
+            //Si se encontró el nodo que contiene elem
+            if (comparacion == 0) {
+                exito = true;
+                //Si el elem a eliminar tiene dos hijos
+                if (izq != null && der != null) { 
+                    //Busco al elemento menor del subarbol derecho
+                    Comparable menorElem = menorEnSubarbol(der);
+                    //Elimino elemento encontrado
+                    eliminarAux(der, nodo, menorElem);
+                    //Reemplazo en nodo de elemento eliminado por el menor encontrado
+                    nodo.setElemento(menorElem);
+                } else {
+                    //Si el elem a eliminar es hoja
+                    if (izq == null && der == null) {
+                        casoHoja(nodo, padre);
+                    } else { //Si el elem a eliminar tiene solo un hijo
+                        casoUnHijo(nodo, padre);
+                    }
+                }
+            } else { //Si no se encuentra, se busca en sus hijos
+                //Si elem es menor al del nodo
+                if (comparacion < 0) {
+                    //Busco por subarbol izquierdo
+                    exito = eliminarAux(izq, nodo, elem); 
+                } else { //Si elem es mayor al del nodo
+                    //Busco por subarbol derecho
+                    exito = eliminarAux(der, nodo, elem); 
+                }
+            }
+            //Si se inserto, verifico balanceo
+            if (exito) {
+                //Recalculo altura 
+                nodo.recalcularAltura();
+                //Veo balance de nodo
+                int balance = balance(nodo);
+                //Si esta desbalanceado
+                if (balance < -1 || balance > 1) {
+                    balancear(nodo, balance, padre);
+                    nodo.recalcularAltura();
+                } 
+            } 
+        }
+        return exito;
+    }
+
+    private void casoHoja(NodoAVL nodo, NodoAVL padre) {
+        //Caso del metodo eliminar, elimina un nodo que es hoja.
+        //Si el arbol tiene un solo elemento
+        if (padre == null) {
+            this.raiz = null;
+        } else {
+            boolean nodoEsMenor = (nodo.getElemento()).compareTo(padre.getElemento()) < 0;
+            //Si el elemento de nodo es menor al de su padre, elimino HI de padre
+            if (nodoEsMenor) {
+                padre.setIzquierdo(null);
+            } else { //Si elemento es mayor al de su padre, elimino HD de padre
+                padre.setDerecho(null);
+            }
+        }
+    }
+
+    /****/
+    private void casoUnHijo(NodoAVL nodo, NodoAVL padre) {
+        //Caso del metodo eliminar, elimina nodo que tiene un solo hijo
+        NodoAVL izq = nodo.getIzquierdo();
+        NodoAVL der = nodo.getDerecho();
+        //Si padre de nodo no es nulo, es decir, nodo no es raiz
+        if (padre != null) {
+            boolean nodoEsMenor = (nodo.getElemento()).compareTo(padre.getElemento()) < 0;
+            if (der == null) { //Si solo tiene HI
+                if (nodoEsMenor) { //Si elemNodo es menor al de su padre, coloco izq como HI
+                    padre.setIzquierdo(izq);
+                } else { //Si elemNodo es mayor al de su padre, coloco izq como HD
+                    padre.setDerecho(izq);
+                }
+            } else { //Si solo tiene HD
+                if (nodoEsMenor) { //Si elemNodo es menor al de su padre, coloco der como HI
+                    padre.setIzquierdo(der);
+                } else { //Si elemNodo es mayor al de su padre, coloco der como HD
+                    padre.setDerecho(der);
+                }
+            }
+        } else { //Si nodo es raiz, lo reemplazo por su hijo
+            if (der == null) {
+                this.raiz = izq;
+            } else {
+                this.raiz = der;
+            }
+        }
+    }
+
+
+    ///////////////////////////////////////
 
     private int balance(NodoAVLDicc nodo){
         //Modulo que calcula el balance de un nodoAVL

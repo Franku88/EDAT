@@ -1,4 +1,5 @@
 package estructuras.especifico.diccionario;
+@SuppressWarnings("rawtypes")
 
 public class NodoAVLDicc {
 
