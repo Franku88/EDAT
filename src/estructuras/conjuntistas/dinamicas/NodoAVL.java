@@ -36,6 +36,7 @@ public class NodoAVL {
 
     public void setIzquierdo(NodoAVL izq) {
         this.izquierdo = izq;
+        this.recalcularAltura();
     }
 
     public NodoAVL getDerecho() {
@@ -44,6 +45,7 @@ public class NodoAVL {
 
     public void setDerecho(NodoAVL der) {
         this.derecho = der;
+        this.recalcularAltura();
     }
 
     public int getAltura() {

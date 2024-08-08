@@ -52,6 +52,14 @@ public class testArbolAVL {
         System.out.println("Original: \n"+tree.toString());
         tree.eliminar(14);
         System.out.println(tree.toString());
+        tree.vaciar();
+
+        System.out.println("<-- Otro eliminar nodo con 2 hijos -->");
+        llenarArbol(tree, new int[] {15, 9, 20, 6, 12, 17, 35});
+        System.out.println("Original: \n"+tree.toString());
+        tree.eliminar(20);
+        System.out.println(tree.toString());
+        tree.vaciar();
     }
 
     public static void llenarArbol(ArbolAVL tree, int[] arr){

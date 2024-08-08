@@ -1,6 +1,7 @@
 package estructuras.conjuntistas.dinamicas;
+import estructuras.especifico.diccionario.NodoAVLDicc;
 import estructuras.lineales.dinamicas.Lista; //Usado en métodos de listado
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
 
 public class ArbolAVL {
 
@@ -129,29 +130,20 @@ public class ArbolAVL {
 
     private void casoUnHijo(NodoAVL nodo, NodoAVL padre) {
         //Caso del metodo eliminar, elimina nodo que tiene un solo hijo
-        NodoAVL izq = nodo.getIzquierdo();
-        NodoAVL der = nodo.getDerecho();
+        //Precondicion: nodo tiene al menos un hijo no nulo
+        NodoAVL hijo = nodo.getIzquierdo(); //Tomo HI
+        if (hijo == null) { //Si HI es null, entonces HD no es null
+            hijo = nodo.getDerecho();
+        }
         if (padre != null) { //Si nodo no es raiz
-            boolean nodoEsMenor = (nodo.getElemento()).compareTo(padre.getElemento()) < 0;
-            if (der == null) { //Si solo tiene HI
-                if (nodoEsMenor) { //Si elemNodo es menor al de su padre, coloco izq como HI
-                    padre.setIzquierdo(izq);
-                } else { //Si elemNodo es mayor al de su padre, coloco izq como HD
-                    padre.setDerecho(izq);
-                }
-            } else { //Si solo tiene HD
-                if (nodoEsMenor) { //Si elemNodo es menor al de su padre, coloco der como HI
-                    padre.setIzquierdo(der);
-                } else { //Si elemNodo es mayor al de su padre, coloco der como HD
-                    padre.setDerecho(der);
-                }
+            //Si elem nodo es menor al de su padre, coloco hijo como HI
+            if ((nodo.getElemento()).compareTo(padre.getElemento()) < 0) {
+                padre.setIzquierdo(hijo);
+            } else { //Si elem nodo es mayor al de su padre, coloco hijo como HD
+                padre.setDerecho(hijo);
             }
         } else { //Si nodo es raiz, lo reemplazo por su hijo
-            if (der == null) {
-                this.raiz = izq;
-            } else {
-                this.raiz = der;
-            }
+            this.raiz = hijo;
         }
     }
 
@@ -160,13 +152,12 @@ public class ArbolAVL {
         //Elijo buscar nodo con elemento menor del subarbol derecho
         NodoAVL subarbol = nodo.getDerecho();
         NodoAVL candidato = menorEnSubarbol(subarbol);
-        /*Otra opcion: buscar el mayor del subarbol izquierdo
+        /* Otra opcion: buscar el mayor del subarbol izquierdo
         NodoAVL subarbol = nodo.getIzquierdo();
-        NodoAVL candidato = mayorEnSubarbol(subarbol);*/
+        NodoAVL candidato = mayorEnSubarbol(subarbol); */
         eliminarAux(subarbol, nodo, candidato.getElemento()); //Elimino candidato encontrado
         if (padre != null) { //Si nodo no es raiz
-            boolean nodoEsMenor = (candidato.getElemento()).compareTo(padre.getElemento()) < 0;
-            if (nodoEsMenor) {
+            if ((candidato.getElemento()).compareTo(padre.getElemento()) < 0) {
                 padre.setIzquierdo(candidato); //Si candidato es menor a padre
             } else {
                 padre.setDerecho(candidato); //Si candidato es mayor a padre
