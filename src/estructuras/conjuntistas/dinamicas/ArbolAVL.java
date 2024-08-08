@@ -1,5 +1,4 @@
 package estructuras.conjuntistas.dinamicas;
-import estructuras.especifico.diccionario.NodoAVLDicc;
 import estructuras.lineales.dinamicas.Lista; //Usado en métodos de listado
 @SuppressWarnings({"rawtypes", "unchecked"})
 
@@ -11,7 +10,7 @@ public class ArbolAVL {
         this.raiz = null;
     }
 
-    public boolean insertar(Comparable elem){
+    public boolean insertar(Comparable elem) {
         //Inserta un elem conservando el orden de el arbol 
         boolean exito = true;
         if (this.esVacio()){
@@ -22,7 +21,7 @@ public class ArbolAVL {
         return exito;
     }
 
-    private boolean insertarAux(NodoAVL nodo, Comparable elem, NodoAVL padre){
+    private boolean insertarAux(NodoAVL nodo, Comparable elem, NodoAVL padre) {
         //Metodo auxiliar que busca la posicion del nuevo nodo y lo inserta si no se encuentra
         //Retorna verdadero si se pudo insertar, falso si el elemento ya se encuentra en el arbol
         //padre: variable para balancear a nodo si fuera necesario
@@ -170,7 +169,7 @@ public class ArbolAVL {
         candidato.setDerecho(nodo.getDerecho());
     }
 
-    public Comparable minimoElem(){
+    public Comparable minimoElem() {
         //Metodo que retorna el elemento mas chico del arbol
         Comparable menor;
         if (!this.esVacio()) {
@@ -181,7 +180,7 @@ public class ArbolAVL {
         return menor;
     }
 
-    public Comparable maximoElem(){ 
+    public Comparable maximoElem() { 
         //Metodo que retorna el elemento mas grande del arbol
         Comparable mayor;
         if (!this.esVacio()) {
@@ -256,7 +255,7 @@ public class ArbolAVL {
         }
     }
 
-    private NodoAVL rotarIzquierda(NodoAVL pivote){
+    private NodoAVL rotarIzquierda(NodoAVL pivote) {
         //Guardo hijo derecho del pivote
         NodoAVL hD = pivote.getDerecho();
         //Guardo hijo izquierdo del hijo derecho
@@ -272,7 +271,7 @@ public class ArbolAVL {
         return hD;
     }
 
-    private NodoAVL rotarDerecha(NodoAVL pivote){
+    private NodoAVL rotarDerecha(NodoAVL pivote) {
         //Guardo hijo izquierdo del pivote
         NodoAVL hI = pivote.getIzquierdo();
         //Guardo hijo derecho del hijo izquierdo
@@ -288,16 +287,15 @@ public class ArbolAVL {
         return hI;
     }
 
-    public boolean pertenece(Comparable elem){
+    public boolean pertenece(Comparable elem) {
         //Retorna verdadero si elem se encuentra en el arbol
         return perteneceAux(this.raiz, elem);
     }
 
-    private boolean perteneceAux(NodoAVL nodo, Comparable elem){
+    private boolean perteneceAux(NodoAVL nodo, Comparable elem) {
         //Metodo auxiliar que verifica si un elemento esta en el arbol
         boolean encontrado;
-        //Si nodo no es nulo
-        if (nodo != null) {
+        if (nodo != null) { //Si nodo no es nulo
             //Compara elem con elemento del nodo
             int comparacion = elem.compareTo(nodo.getElemento());
             if (comparacion == 0) { //Si son iguales
@@ -316,14 +314,14 @@ public class ArbolAVL {
         return encontrado;
     }
 
-    public Lista listar(){ 
+    public Lista listar() { 
         //Retorna una lista de los elementos del arbol
         Lista list = new Lista();
         listarAux(this.raiz, list);
         return list;
     }
 
-    private void listarAux(NodoAVL nodo, Lista list){
+    private void listarAux(NodoAVL nodo, Lista list) {
         //Lista elementos del arbol de menor a mayor, realizando recorrido inorden inverso
         if (nodo != null) { 
             listarAux(nodo.getDerecho(), list);
@@ -332,14 +330,14 @@ public class ArbolAVL {
         }
     }
 
-    public Lista listarRango(Comparable min, Comparable max){
+    public Lista listarRango(Comparable min, Comparable max) {
         //Lista elementos del arbol de menor a mayor que se encuentran en el intervalo [min,max]
         Lista list = new Lista();
         listarRangoAux(this.raiz, min, max, list);
         return list;
     }
 
-    private void listarRangoAux(NodoAVL nodo, Comparable min, Comparable max, Lista list){
+    private void listarRangoAux(NodoAVL nodo, Comparable min, Comparable max, Lista list) {
         //Inserta los elementos => min y <= max. Realizo insercion con recorrido inorden inverso (der, raiz, izq)
         //Si nodo no es nulo
         if (nodo != null) {
@@ -364,7 +362,7 @@ public class ArbolAVL {
     }
 
     public String toString(){
-        //Retorna un string que contiene una representacion del ArbolBB
+        //Retorna un string que contiene una representacion del ArbolAVL
         String cad;
         if (this.esVacio()){
             cad = "Arbol Vacio";
