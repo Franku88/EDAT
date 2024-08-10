@@ -1,6 +1,4 @@
 package estructuras.especifico.diccionario;
-import estructuras.conjuntistas.dinamicas.ArbolAVL;
-import estructuras.conjuntistas.dinamicas.NodoAVL;
 import estructuras.lineales.dinamicas.Lista; //Usado en métodos de listado
 @SuppressWarnings({"rawtypes", "unchecked"})
 
@@ -289,12 +287,39 @@ public class Diccionario {
         return hI;
     }
 
-    public boolean pertenece(Comparable clave) {
-        //Retorna verdadero si clave se encuentra en el arbol
-        return perteneceAux(this.raiz, clave);
+    public Object obtenerDato(Comparable clave) {
+        //Retorna el dato del nodo con clave ingresada
+        //Precondicion: clave debe encontrarse en el diccionario (si no retorna null)
+        return obtenerDatoAux(this.raiz, clave);
     }
 
-    private boolean perteneceAux(NodoAVLDicc nodo, Comparable clave) {
+    public Object obtenerDatoAux(NodoAVLDicc nodo, Comparable clave) {
+        //Metodo auxiliar que busca nodo con clave y retorna su dato
+        Object dato;
+        if (nodo != null) { //Si nodo no es nulo
+            //Compara clave con clave del nodo
+            int comparacion = clave.compareTo(nodo.getClave());
+            if (comparacion == 0) { //Si son iguales
+                dato = nodo.getDato();
+            } else {
+                if (comparacion < 0) { //Si clave es menor al claveNodo, busco en subArbol izq
+                    dato = existeClaveAux(nodo.getIzquierdo(), clave);
+                } else { //Si clave es mayor a al claveNodo, busco en subArbol der
+                    dato = existeClaveAux(nodo.getDerecho(), clave);
+                }
+            }
+        } else { //Si nodo es nulo, no se encuentra clave
+            dato = null;
+        }
+        return dato;
+    }
+
+    public boolean existeClave(Comparable clave) {
+        //Retorna verdadero si clave se encuentra en el arbol
+        return existeClaveAux(this.raiz, clave);
+    }
+
+    private boolean existeClaveAux(NodoAVLDicc nodo, Comparable clave) {
         //Metodo auxiliar que verifica si una clave esta en el arbol
         boolean encontrado;
         if (nodo != null) { //Si nodo no es nulo
@@ -303,66 +328,55 @@ public class Diccionario {
             if (comparacion == 0) { //Si son iguales
                 encontrado = true;
             } else {
-                if (comparacion < 0) { //Si elem es menor al elemNodo, busco en subArbol izq
-                    encontrado = perteneceAux(nodo.getIzquierdo(), clave);
-                } else { //Si elem es mayor a al elemNodo, busco en subArbol der
-                    encontrado = perteneceAux(nodo.getDerecho(), clave);
+                if (comparacion < 0) { //Si clave es menor al claveNodo, busco en subArbol izq
+                    encontrado = existeClaveAux(nodo.getIzquierdo(), clave);
+                } else { //Si clave es mayor a al claveNodo, busco en subArbol der
+                    encontrado = existeClaveAux(nodo.getDerecho(), clave);
                 }
             }
-        } else { //Si nodo es nulo, no se encuentra elem
+        } else { //Si nodo es nulo, no se encuentra clave
             encontrado = false;
         }
         return encontrado;
     }
 
-    public Lista listar() { 
-        //Retorna una lista de los elementos del arbol
+    public Lista listarClaves() { 
+        //Retorna una lista de las claves del arbol
         Lista list = new Lista();
-        listarAux(this.raiz, list);
+        listarClavesAux(this.raiz, list);
         return list;
     }
 
-    private void listarAux(NodoAVLDicc nodo, Lista list) {
-        //Lista elementos del arbol de menor a mayor, realizando recorrido inorden inverso
+    private void listarClavesAux(NodoAVLDicc nodo, Lista list) {
+        //Lista claves del diccionarioAVL de menor a mayor, realizando recorrido inorden inverso
         if (nodo != null) { 
-            listarAux(nodo.getDerecho(), list);
+            listarClavesAux(nodo.getDerecho(), list);
             list.insertar(nodo.getClave(), 1);
-            listarAux(nodo.getIzquierdo(), list);
+            listarClavesAux(nodo.getIzquierdo(), list);
         }
     }
 
-    public Lista listarRango(Comparable min, Comparable max) {
-        //Lista elementos del arbol de menor a mayor que se encuentran en el intervalo [min,max]
+    public Lista listarDatos() { 
+        //Retorna una lista de los datos del arbol
         Lista list = new Lista();
-        listarRangoAux(this.raiz, min, max, list);
+        listarDatosAux(this.raiz, list);
         return list;
     }
 
-    private void listarRangoAux(NodoAVLDicc nodo, Comparable min, Comparable max, Lista list) {
-        //Inserta las claves => min y <= max. Realizo insercion con recorrido inorden inverso (der, raiz, izq)
-        if (nodo != null) { //Si nodo no es nulo
-            Comparable claveNodo = nodo.getClave(); //Clave de nodo
-            //Comparaciones de claveNodo con los extremos min y max
-            int comparacionMin = claveNodo.compareTo(min);
-            int comparacionMax = claveNodo.compareTo(max);
-            if (comparacionMax < 0) { //Si claveNodo < max, recorro subArbol derecho
-                listarRangoAux(nodo.getDerecho(), min, max, list); 
-            }
-            //Si min <= claveNodo <= max, listo elemento en posicion 1
-            if (comparacionMin >= 0 && comparacionMax <= 0) {
-                list.insertar(claveNodo, 1);
-            }
-            if (comparacionMin > 0) { //Si min < claveNodo, recorro subArbol izquierdo
-                listarRangoAux(nodo.getIzquierdo(), min, max, list);
-            }
+    private void listarDatosAux(NodoAVLDicc nodo, Lista list) {
+        //Lista datos del diccionarioAVL de menor a mayor, realizando recorrido inorden inverso
+        if (nodo != null) { 
+            listarDatosAux(nodo.getDerecho(), list);
+            list.insertar(nodo.getDato(), 1);
+            listarDatosAux(nodo.getIzquierdo(), list);
         }
     }
 
     public String toString(){
-        //Retorna un string que contiene una representacion del ArbolAVLDicc
+        //Retorna un string que contiene una representacion del Diccionario
         String cad;
         if (this.esVacio()){
-            cad = "Arbol Vacio";
+            cad = "Diccionario Vacio";
         } else {
             cad = toStringAux(this.raiz);
         }
@@ -377,7 +391,7 @@ public class Diccionario {
             NodoAVLDicc izq = nodo.getIzquierdo(); 
             NodoAVLDicc der = nodo.getDerecho();
             //Concateno clave del nodo
-            cad = cad +"("+ nodo.getClave() + ") ->  ";
+            cad = cad +"("+ nodo.getClave() + ")("+nodo.getDato()+") ->  ";
             if (izq != null) { //Si tiene HI, lo concateno
                 cad = cad + "HI: " + izq.getClave() + "    ";
             } else {

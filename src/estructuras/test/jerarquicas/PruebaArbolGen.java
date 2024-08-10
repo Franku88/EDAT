@@ -1,4 +1,4 @@
-package estructuras.test.lineales;
+package estructuras.test.jerarquicas;
 
 import estructuras.jerarquicas.dinamicas.ArbolGen;
 

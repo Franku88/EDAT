@@ -1,37 +1,43 @@
 package estructuras.grafos;
 
 public class NodoAdy {
-    private NodoVert vertice;
-    private NodoAdy sigAdyacente;
-    private double etiqueta;
+    private double etiqueta; //Etiqueta del arco
+    private NodoVert vertice; //Destino del arco
+    private NodoAdy sigAdyacente; //Siguiente arco
 
-    public NodoAdy(NodoVert nodo, NodoAdy ady, double etiq){
+    public NodoAdy(NodoVert nodo, double etiq) {
+        this.vertice = nodo;
+        this.sigAdyacente = null;
+        this.etiqueta = etiq;
+    }
+
+    public NodoAdy(NodoVert nodo, NodoAdy ady, double etiq) {
         this.vertice = nodo;
         this.sigAdyacente = ady;
         this.etiqueta = etiq;
     }
 
-    public NodoVert getVertice(){
-        return vertice;
+    public double getEtiqueta() {
+        return this.etiqueta;
+    }  
+
+    /*public void setEtiqueta(double etiqueta) {
+        this.etiqueta = etiqueta;
+    }*/
+
+    public NodoVert getVertice() {
+        return this.vertice;
     }
 
-    public NodoAdy getSigAdyacente(){
-        return sigAdyacente;
-    }
-
-    public double getEtiqueta(){
-        return etiqueta;
-    }
-
-    public void setVertice(NodoVert vertice){
+    public void setVertice(NodoVert vertice) {
         this.vertice = vertice;
     }
 
-    public void setSigAdyacente(NodoAdy sigAdyacente){
-        this.sigAdyacente = sigAdyacente;
+    public NodoAdy getSigAdyacente() {
+        return this.sigAdyacente;
     }
 
-    public void setEtiqueta(double etiq){
-        this.etiqueta = etiq;
+    public void setSigAdyacente(NodoAdy sigAdyacente) {
+        this.sigAdyacente = sigAdyacente;
     }
 }
