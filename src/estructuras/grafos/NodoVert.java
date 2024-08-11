@@ -11,6 +11,12 @@ public class NodoVert {
         this.primerAdyacente = null;
     }
 
+    public NodoVert(Object elem, NodoVert sigVert) {
+        this.elemento = elem;
+        this.sigVertice = sigVert;
+        this.primerAdyacente = null;
+    }
+
     public NodoVert(Object elem, NodoVert sigVert, NodoAdy ady) {
         this.elemento = elem;
         this.sigVertice = sigVert;

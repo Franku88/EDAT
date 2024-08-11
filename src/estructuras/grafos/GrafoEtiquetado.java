@@ -1,168 +1,191 @@
 package estructuras.grafos;
-import estructuras.lineales.dinamicas.*; 
+import estructuras.lineales.dinamicas.Lista;
+import estructuras.lineales.dinamicas.Cola;
 
 public class GrafoEtiquetado {
-
     private NodoVert inicio;
 
     public GrafoEtiquetado() {
         this.inicio = null;
     }
-    
+
     public boolean insertarVertice(Object elem) {
-        boolean exito = false;
-        //Verifica si existe
-        NodoVert aux = ubicarVertice(elem);
-        //Si no es encontrado, lo inserta al principio
-        if (aux == null) {
-            this.inicio = new NodoVert(elem, this.inicio, null);
-            exito = true;
+        boolean noExiste = !existeVertice(elem);
+        if (noExiste) { //Si no existe, lo inserta al principio
+            this.inicio = new NodoVert(elem, this.inicio);
         }
-        return exito;
+        return noExiste; //Si no existe, entonces se inserta con exito
     }
 
     private NodoVert ubicarVertice(Object buscado) {
-        //Busca y retorna vertice con elemento buscado
+        //Busca y retorna vertice con elemento buscado del grafo
+        //Si no se encuentra, retorna null
         NodoVert aux = this.inicio;
-        while (aux != null && !buscado.equals(aux.getElemento())) {
-            aux = aux.getSigVertice();
+        while(aux != null && !buscado.equals(aux.getElemento())) {
+            aux = aux.getSigVertice(); //Para comparar en la siguiente iteración
         }
         return aux;
     }
 
+    public boolean existeVertice(Object buscado) {
+        //Retorna falso si el vertice no es ubicado (ubicarVertice retorna null)
+        return (ubicarVertice(buscado) != null);
+    }
+
     public boolean eliminarVertice(Object buscado) {
-        NodoVert aux = this.inicio;
-        NodoVert anterior = null;
+        //Metodo que elimina vertice con elemento buscado
+        //Retorna verdadero si es eliminado, falso en caso de no encontrarlo
+        return eliminarVerticeAux(this.inicio, null, buscado);
+    }
+
+    private boolean eliminarVerticeAux(NodoVert nodo, NodoVert anterior, Object buscado) {
+        //Metodo auxiliar para eliminar un vertice y sus respectivos arcos
+        //Retorna verdadero si es eliminado, falso si no se encuentra el elemento buscado
         boolean exito = false;
-        while (aux != null && !buscado.equals(aux.getElemento())) {
-            anterior = aux;
-            aux = aux.getSigVertice();
-        }
-        if (aux != null) {
-            NodoAdy ady = aux.getPrimerAdyacente();
-            while (ady != null) {
-                eliminarArcoAux(ady.getVertice(), buscado);
-                ady = ady.getSigAdyacente();
+        if (nodo != null) { //Si es null, entonces anterior tiene al ultimo vertice del grafo
+            exito = buscado.equals(nodo.getElemento()); //Compara elemento buscado con el de nodo
+            if (exito) { //Si se encuentra el elemento
+                eliminarArcos(nodo); //Elimina todos los arcos enlazados al nodo
+                if (anterior == null) { //Si anterior es null, entonces nodo es inicio
+                    this.inicio = nodo.getSigVertice();
+                } else { //Si no, enlazo anterior vertice al siguiente vertice del eliminado
+                    anterior.setSigVertice(nodo.getSigVertice());
+                }
+            } else { //Si no se encuentra, paso recursivo con siguiente vertice
+                exito = eliminarVerticeAux(nodo.getSigVertice(), nodo, buscado);
             }
-            //Si anterior es null, entonces buscado se encuentra al principio
-            if (anterior == null) {
-                this.inicio = this.inicio.getSigVertice();
-            } else {
-                anterior.setSigVertice(aux.getSigVertice());
-            }
-            exito = true;
         }
         return exito;
     }
 
     public boolean insertarArco(Object origen , Object destino, double etiqueta) {
+        /*Metodo que inserta un arco con elementos origen y destino ingresado, 
+        ademas de la etiqueta del arco*/
         boolean exito = false;
-        NodoVert aux = this.inicio;
-        NodoVert auxOrig = null;
-        NodoVert auxDest = null;
-
-        while (aux != null && (auxOrig == null || auxDest == null)) {
-            if (origen.equals(aux.getElemento())) {
-                auxOrig = aux;
-            } else {
-                if (destino.equals(aux.getElemento())) {
-                    auxDest = aux;
-                }   
+        NodoVert aux = this.inicio, nodoOrig = null, nodoDest = null;
+        //No uso obtenerVertice ya que recorreria dos veces los vertices en el peor de los casos
+        while (aux != null && (nodoOrig == null || nodoDest == null)) { //Hasta encontrar ambos nodos o llegar al ultimo vertice
+            if (origen.equals(aux.getElemento())) { //Compara con origen
+                nodoOrig = aux;
+            } else { //Si no es origen
+                if (destino.equals(aux.getElemento())) { //Compara con destino
+                    nodoDest = aux;
+                }
             }
-            aux = aux.getSigVertice();
+            aux = aux.getSigVertice(); //Referencio al siguiente vertice
         }
-        if (auxOrig != null && auxDest != null) {
-            conectarAdy(auxOrig, auxDest, etiqueta);
-            conectarAdy(auxDest, auxOrig, etiqueta);
-            exito = true;
+        exito = (nodoOrig != null && nodoDest != null); //Si encontro ambos vertices
+        if (exito) { //Conecta ambos arcos (igual etiqueta pero ambos casos de orgen/destino)
+            conectarAdy(nodoOrig, nodoDest, etiqueta);
+            conectarAdy(nodoDest, nodoOrig, etiqueta);
         }
         return exito;
     }
 
     private void conectarAdy(NodoVert origen, NodoVert destino, double etiqueta){
         //Conecta un nodo origen con nodo destino, Precondicion: no deben ser nulos
+        //Reemplaza el primer adyacente de origen con el ingresado, enlaza el antiguo primer al nuevo
         NodoAdy nuevo = new NodoAdy(destino, origen.getPrimerAdyacente(), etiqueta);
         origen.setPrimerAdyacente(nuevo);
     }
 
-    public boolean eliminarArco(Object origen, Object destino) {
-        boolean exito = false;
-        NodoVert auxOrig = ubicarVertice(origen);
-        
-        //Si encuentra origen, busco en sus adyacentes al destino
-        if (auxOrig != null) {
-            NodoAdy ady = auxOrig.getPrimerAdyacente();
-            NodoAdy anterior = null;
-            NodoVert auxDest = null;
+    public void eliminarArcos(NodoVert nodo) {
+        //Metodo que elimina todos los arcos enlazados a nodo (como inicio y destino)
+        //Precondicion: nodo no es null
+        NodoAdy ady = nodo.getPrimerAdyacente();
+        while (ady != null) {
+            eliminarArcoAux(ady.getVertice(), nodo.getElemento()); //Elimina arco inverso (desde destino a inicio)
+            ady = ady.getSigAdyacente(); //Siguiente arco
+        }
+        nodo.setPrimerAdyacente(null); //Desenlaza todos los adyacentes desde nodo
+    }
 
-            //Busco destino en cada ady
-            while (!exito && ady != null){
-                if (destino.equals(ady.getVertice().getElemento())){
-                    auxDest = ady.getVertice();
-                    exito = true;
-                } else {
+    public boolean eliminarArco(Object origen, Object destino) {
+        //Metodo que elimina el arco (arcos) de origen a destino (y destino a origen)
+        //Retorna falso si origen no es encontrado o si no existe arco entre ambos
+        /*Se busca origen, luego destino es buscado en adyacentes de origen, al buscar 
+        en los adyacentes se verifica la existencia o no del arco sin necesidad de buscar
+        a vertice destino*/
+        boolean exito = false;
+        NodoVert nodoOrig = ubicarVertice(origen);
+        if (nodoOrig != null) { //Si encuentra origen, busco en sus adyacentes al destino
+            NodoAdy ady = nodoOrig.getPrimerAdyacente(), anterior = null;
+            NodoVert nodoDest = null;
+            //No uso ubicarArco pues necesito referencia al anterior (ubicarArco no mantiene dicho valor)
+            while (!exito && ady != null) { //Busco destino en cada ady
+                exito = destino.equals(ady.getVertice().getElemento());
+                if (exito) { //Si se encuentra vertice destino
+                    nodoDest = ady.getVertice();
+                } else { //Si no se encuentra vertice, siguiente vertice
                     anterior = ady;
                     ady = ady.getSigAdyacente();
                 }
             }
-
-            //Si estan conectados, elimino arcos
-            if (exito) {
-                //Elimino arco desde el origen
-                if (anterior == null){ //caso especial es el primer ady
-                    auxOrig.setPrimerAdyacente(ady.getSigAdyacente());
-                } else {
-                    anterior.setSigAdyacente(ady.getSigAdyacente());
-                }
-                //Elimino arco desde el destino
-                eliminarArcoAux(auxDest, origen);
+            if (exito) { //Si estan conectados, elimino arco (ambos sentidos)
+                pisarArco(nodoOrig, anterior, ady); //Reemplazo referencia de arco desde el origen
+                eliminarArcoAux(nodoDest, origen); //Elimino arco desde el destino
             }
         }
         return exito;
     }
 
-    private boolean eliminarArcoAux(NodoVert vert, Object elem) {
-        //Busca y elimina arco desde vert a elem, retorna verdadero si es eliminado
-        NodoAdy anterior  = null;
-        NodoAdy aux = vert.getPrimerAdyacente();
+    private boolean eliminarArcoAux(NodoVert nodo, Object elem) {
+        //Busca y elimina arco desde nodo a elem, retorna verdadero si es eliminado
+        NodoAdy anterior = null, aux = nodo.getPrimerAdyacente();
         boolean exito = false;
         while (!exito && aux != null) {
-            if (elem.equals(aux.getVertice().getElemento())) {
-                exito = true;
-            } else {
+            exito = elem.equals(aux.getVertice().getElemento());
+            if (!exito) { //Si adyacente aux actual no enlaza a elem
                 anterior = aux;
                 aux = aux.getSigAdyacente();
             }
         }
-        if (exito) {
-            if (anterior == null) {
-                vert.setPrimerAdyacente(aux.getSigAdyacente());
-            } else {
-                anterior.setSigAdyacente(aux.getSigAdyacente());
-            }
+        if (exito) { //Si se encontro arco
+            pisarArco(nodo, anterior, aux); 
         }
         return exito;
     }
 
-    public boolean existeVertice(Object buscado) {
-        NodoVert aux = ubicarVertice(buscado);
-        return aux != null;
+    private void pisarArco(NodoVert nodo, NodoAdy anterior, NodoAdy eliminado) {
+        //Metodo auxiliar que reemplaza la referencia al nodoAdy eliminado
+        //Preconidiciones: nodo y eliminado no son nulos
+        if (anterior == null) { //Caso en que eliminado sea primer ady
+            nodo.setPrimerAdyacente(eliminado.getSigAdyacente());
+        } else {
+            anterior.setSigAdyacente(eliminado.getSigAdyacente());
+        }
     }
 
     public boolean existeArco(Object origen, Object destino) {
-        NodoVert auxOrig = ubicarVertice(origen);
-        boolean exito = false;
-        if (null != auxOrig) { //Si encuentra origen, busco en sus adyacentes al destino
-            NodoAdy ady = auxOrig.getPrimerAdyacente();
-            //Busco destino en cada ady
-            while (!exito && ady != null) {
-                exito = destino.equals(ady.getVertice().getElemento());
-                if (!exito) {
-                    ady = ady.getSigAdyacente();
+        /*Metodo que retorna verdadero si existe arco desde un vertice con 
+        elemento origen hasta vertice con elemento destino*/
+        NodoVert nodoOrig = ubicarVertice(origen); //Busca origen
+        return (ubicarArco(nodoOrig, destino) != null);
+    }
+
+    private NodoAdy ubicarArco(NodoVert origen, Object destino) {
+        //Retorna arco referenciado en vertice origen y con vertice de elemento destino
+        //Precondicion: origen no es null
+        NodoAdy ady = null;
+        boolean encontrado = false;
+        if (origen != null) {
+            ady = origen.getPrimerAdyacente();
+            while (ady != null && !encontrado) { //Busco destino en cada ady
+                encontrado = destino.equals(ady.getVertice().getElemento());
+                if (!encontrado) { //Si no se encuentra arco con destino
+                    ady = ady.getSigAdyacente(); //Busca al siguiente
                 }
             }
         }
-        return exito;
+        return ady;
+    }
+
+    public boolean esVacio(){
+        return this.inicio == null;
+    }
+
+    public void vaciar(){
+        this.inicio = null;
     }
 
     public boolean existeCamino(Object origen, Object destino) {
@@ -384,14 +407,6 @@ public class GrafoEtiquetado {
                 ady = ady.getSigAdyacente();
             }
         }
-    }
-
-    public boolean esVacio(){
-        return this.inicio == null;
-    }
-
-    public void vaciar(){
-        this.inicio = null;
     }
     
     public String toString(){
