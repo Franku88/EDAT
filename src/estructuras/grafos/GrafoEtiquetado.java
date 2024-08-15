@@ -260,27 +260,26 @@ public class GrafoEtiquetado {
             if (camCorto.esVacia() || ((camActual.longitud()+1) < camCorto.longitud())) {
                 Object elem = nodo.getElemento();
                 camActual.insertar(elem, camActual.longitud()+1); //Inserta nodo actual (pues es recorrido)
-                    if (elem.equals(destino)) { //Si encuentra destino
-                        //Clona camActual para no modificar la referencia
-                        camCorto = camActual.clone();
-                    } else {
-                        //Verifica si no supera al mas corto con la siguiente insercion (ya que no tendria sentido seguir buscando en ese punto)
-                        if (camCorto.esVacia() || ((camActual.longitud()+1) < camCorto.longitud())) {
-                            NodoAdy ady = nodo.getPrimerAdyacente();
-                            NodoVert auxVert = null;
-                            while (ady != null) { //Recorro sus adyacentes (arcos)
-                                auxVert = ady.getVertice(); 
-                                //Si no fue visitado en este camino, entonces lo visita
-                                if (camActual.localizar(auxVert.getElemento()) < 0) { 
-                                    camCorto = caminoCortoAux(auxVert, destino, camCorto, camActual); 
-                                }
-                                ady = ady.getSigAdyacente(); //Siguiente arco
+                if (elem.equals(destino)) { //Si encuentra destino
+                    camCorto = camActual.clone(); //Clona camActual para no modificar la referencia
+                } else {
+                    //Verifica si no supera al mas corto con la siguiente insercion (ya que no tendria sentido seguir buscando en ese punto)
+                    if (camCorto.esVacia() || ((camActual.longitud()+1) < camCorto.longitud())) {
+                        NodoAdy ady = nodo.getPrimerAdyacente();
+                        NodoVert auxVert = null;
+                        while (ady != null) { //Recorro sus adyacentes (arcos)
+                            auxVert = ady.getVertice(); 
+                            //Si no fue visitado en este camino, entonces lo visita
+                            if (camActual.localizar(auxVert.getElemento()) < 0) { 
+                                camCorto = caminoCortoAux(auxVert, destino, camCorto, camActual); 
                             }
+                            ady = ady.getSigAdyacente(); //Siguiente arco
                         }
                     }
                 }
-            //Quita nodo actual (ultimo insertado) porque puede haber mas caminos que lo visiten
-            camActual.eliminar(camActual.longitud());
+                //Quita nodo actual (ultimo insertado) porque puede haber mas caminos que lo visiten
+                camActual.eliminar(camActual.longitud());
+            }
         }
         return camCorto;
     }
