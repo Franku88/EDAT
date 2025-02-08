@@ -303,9 +303,9 @@ public class Diccionario {
                 dato = nodo.getDato();
             } else {
                 if (comparacion < 0) { //Si clave es menor al claveNodo, busco en subArbol izq
-                    dato = existeClaveAux(nodo.getIzquierdo(), clave);
+                    dato = obtenerDatoAux(nodo.getIzquierdo(), clave);
                 } else { //Si clave es mayor a al claveNodo, busco en subArbol der
-                    dato = existeClaveAux(nodo.getDerecho(), clave);
+                    dato = obtenerDatoAux(nodo.getDerecho(), clave);
                 }
             }
         } else { //Si nodo es nulo, no se encuentra clave
